@@ -1,0 +1,66 @@
+name: Branch Ruleset Enforcement
+
+on:
+  schedule:
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "dry-run (default), audit-only, or enforce (creates rulesets)"
+        type: choice
+        options: [dry-run, audit-only, enforce]
+        default: dry-run
+      confirm:
+        description: "Type ENFORCE to allow enforce mode"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dcc-rulesets
+  cancel-in-progress: false
+
+jobs:
+  rulesets:
+    name: Evaluate branch rulesets
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create GitHub App installation token
+        id: app-token
+        if: ${{ secrets.DCC_APP_ID != '' }}
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.DCC_APP_ID }}
+          private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
+          owner: Go-Satish-Labs
+
+      - name: Evaluate rulesets
+        env:
+          DCC_TOKEN: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || '' }}
+          DCC_AUTH_MODE: ${{ steps.app-token.outputs.token != '' && 'github-app' || (secrets.DCC_PAT != '' && 'personal-access-token') || 'github-token-limited' }}
+          GITHUB_TOKEN: ${{ github.token }}
+          DCC_CONFIRM_ENFORCE: ${{ inputs.confirm }}
+          RULESET_MODE: ${{ github.event_name == 'schedule' && 'dry-run' || inputs.mode || 'dry-run' }}
+        run: python -m src.cli rulesets --mode "$RULESET_MODE" --output build
+
+      - name: Upload rulesets report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dcc-rulesets-report
+          path: build/
+          retention-days: 30
+          if-no-files-found: ignore

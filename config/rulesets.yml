@@ -1,0 +1,14 @@
+ruleset:
+  name: DCC Default Branch Protection
+  # organization: try one organization-wide ruleset first, fall back to per-repository.
+  # repository: always create per-repository rulesets.
+  scope: organization
+  target_branches: [main, master]
+  require_pull_request: true
+  required_approvals: 1
+  require_conversation_resolution: true
+  block_force_pushes: true
+  block_branch_deletion: true
+  # auto: require check names that succeeded on the default branch.
+  # none: require no status checks. A list such as [test, build] is used verbatim.
+  required_status_checks: auto

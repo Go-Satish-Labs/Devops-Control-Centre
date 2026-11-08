@@ -1,0 +1,56 @@
+name: Repository Discovery
+
+on:
+  schedule:
+    - cron: "5 1 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [repository-created]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dcc-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    name: Discover repositories
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create GitHub App installation token
+        id: app-token
+        if: ${{ secrets.DCC_APP_ID != '' }}
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.DCC_APP_ID }}
+          private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
+          owner: Go-Satish-Labs
+
+      - name: Discover repositories
+        env:
+          DCC_TOKEN: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || '' }}
+          DCC_AUTH_MODE: ${{ steps.app-token.outputs.token != '' && 'github-app' || (secrets.DCC_PAT != '' && 'personal-access-token') || 'github-token-limited' }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -m src.cli discover --output build
+
+      - name: Upload discovery output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dcc-discovery-output
+          path: build/
+          retention-days: 14
+          if-no-files-found: ignore

@@ -1,0 +1,7 @@
+# Default mode. audit-only never writes to any repository.
+mode: audit-only
+stale_workflow_days: 90
+repeated_failure_threshold: 2
+recent_runs_window: 20
+# Private repository names are replaced with stable hashes in public artifacts.
+redact_private_repositories: true

@@ -1,0 +1,62 @@
+name: Organization Audit
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "audit-only never writes to any repository (default)"
+        type: choice
+        options: [audit-only, dry-run]
+        default: audit-only
+  repository_dispatch:
+    types: [repository-created]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dcc-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Audit organization
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create GitHub App installation token
+        id: app-token
+        if: ${{ secrets.DCC_APP_ID != '' }}
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.DCC_APP_ID }}
+          private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
+          owner: Go-Satish-Labs
+
+      - name: Run organization audit
+        env:
+          DCC_TOKEN: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || '' }}
+          DCC_AUTH_MODE: ${{ steps.app-token.outputs.token != '' && 'github-app' || (secrets.DCC_PAT != '' && 'personal-access-token') || 'github-token-limited' }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -m src.cli audit --mode "${{ inputs.mode || 'audit-only' }}" --output build
+
+      - name: Upload audit output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dcc-audit-output
+          path: build/
+          retention-days: 14
+          if-no-files-found: ignore

@@ -1,0 +1,10 @@
+# Repositories excluded entirely from discovery and auditing (names without owner).
+excluded_repositories: []
+# Repositories that never receive rulesets (they are still audited).
+excluded_for_rulesets:
+  - DevOps-Control-Center
+# Repositories that rulesets must never touch.
+write_protected_repositories:
+  - .github
+include_forks: true
+include_archived: true

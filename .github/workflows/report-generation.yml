@@ -1,0 +1,67 @@
+name: Report Generation
+
+# Runs only after a successful Organization Audit. Validates the artifacts, copies them
+# into the repository and commits them when their content changed.
+on:
+  workflow_run:
+    workflows: ["Organization Audit"]
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: dcc-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Validate and publish reports
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Download audit output
+        uses: actions/download-artifact@v4
+        with:
+          name: dcc-audit-output
+          path: build
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Validate artifacts
+        run: python -m src.cli validate --source build
+
+      - name: Publish artifacts
+        run: python -m src.cli publish --source build --target .
+
+      - name: Commit changed artifacts
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          git config user.name "devops-control-center[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets reports
+          if git diff --cached --quiet; then
+            echo "No report changes to commit."
+            exit 0
+          fi
+          git commit -m "chore(reports): update organization health [skip ci]"
+          for attempt in 1 2 3; do
+            if git pull --rebase origin "$DEFAULT_BRANCH" && git push origin "HEAD:$DEFAULT_BRANCH"; then
+              exit 0
+            fi
+            sleep $((attempt * 10))
+          done
+          exit 1

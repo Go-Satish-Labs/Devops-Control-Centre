@@ -1,0 +1,13 @@
+[project]
+name = "devops-control-center"
+version = "1.0.0"
+description = "Organization-wide CI/CD governance, monitoring and SVG reporting for Go-Satish-Labs"
+requires-python = ">=3.12"
+dependencies = ["requests>=2.32", "PyYAML>=6.0", "PyJWT>=2.9", "cryptography>=43.0"]
+
+[project.optional-dependencies]
+test = ["pytest>=8.3"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
