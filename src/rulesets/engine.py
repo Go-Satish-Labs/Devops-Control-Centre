@@ -51,6 +51,11 @@ def build_ruleset_payload(settings: Settings, *, status_checks=(), organization_
             "require_last_push_approval": False,
             "required_review_thread_resolution": bool(cfg.get("require_conversation_resolution", True)),
         }})
+    if cfg.get("copilot_code_review", False):
+        rules.append({"type": "copilot_code_review", "parameters": {
+            "review_on_push": True,
+            "review_draft_pull_requests": False,
+        }})
     if status_checks:
         rules.append({"type": "required_status_checks", "parameters": {
             "strict_required_status_checks_policy": False,
