@@ -5,8 +5,11 @@ ruleset:
   scope: organization
   target_branches: [main, master]
   require_pull_request: true
-  required_approvals: 1
+  # 0 = no human approval needed. Copilot review plus resolved comments is the gate.
+  required_approvals: 0
   require_conversation_resolution: true
+  # Ask Copilot to review every pull request automatically.
+  copilot_code_review: true
   block_force_pushes: true
   block_branch_deletion: true
   # auto: require check names that succeeded on the default branch.
