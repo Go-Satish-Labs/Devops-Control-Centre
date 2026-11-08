@@ -153,21 +153,29 @@ def cmd_notify(args, settings: Settings) -> int:
     client, _ = _client(settings)
     result = run_notifications(client, settings, audit, datetime.now(timezone.utc))
     _write(Path(args.output) / "notifications.json", json.dumps(result, indent=2, default=str) + "\n")
-    lines = ["## Daily notifications", ""]
-    lines.append(
-        f"- Discussion: {result['discussion']['action']} {result['discussion']['url']}"
-        if result["discussion"] else "- Discussion: not posted"
-    )
+    flagged = result["flagged_repositories"]
+    lines = [
+        "## Daily notifications",
+        "",
+        f"- Audit data: status {result['audit_status']}, auth {result['audit_auth_mode']}, "
+        f"from {result['audit_timestamp']}",
+        f"- Flagged repositories: {len(flagged)}" + (f" ({', '.join(flagged)})" if flagged else ""),
+    ]
+    if result["discussion"]:
+        lines.append(f"- Discussion: {result['discussion']['action']} {result['discussion']['url']}")
+    else:
+        lines.append("- Discussion: not posted")
+    if result["project"]:
+        lines.append(f"- Project #{result['project']['number']}: found")
     if result["issues"]:
-        issues = result["issues"]
-        lines.append(
-            f"- Issues: created {issues['created']}, updated {issues['updated']}, "
-            f"reopened {issues['reopened']}, closed {issues['closed']}, deferred {issues['deferred']}"
-        )
-    lines.extend(f"- Error: {error}" for error in result["errors"])
+        i = result["issues"]
+        lines.append(f"- Issues: created {i['created']}, updated {i['updated']}, reopened {i['reopened']}, "
+                     f"closed {i['closed']}, added to project {i['added_to_project']}, deferred {i['deferred']}")
+    for err in result["errors"]:
+        lines.append(f"- Error: {err}")
     write_step_summary("\n".join(lines))
-    for error in result["errors"]:
-        log.error(error)
+    for err in result["errors"]:
+        log.error(err)
     return 1 if result["errors"] else 0
 
 
