@@ -5,6 +5,6 @@ discussions:
 issues:
   enabled: true
   label: dcc-audit
-  repository: DevOps-Control-Center
+  repository: DevOps-Control-Centre
   statuses: [FAILED]
   max_new_per_run: 25
