@@ -120,7 +120,7 @@ class GitHubClient:
     def patch_json(self, path: str, body: dict) -> Any:
         response = self.request("PATCH", path, json_body=body)
         self._raise_for_status(response, path)
-        return response.json()
+        return response.json() if response.content else {}
 
     def graphql(self, query: str, variables: dict | None = None) -> dict:
         path = "/graphql"
