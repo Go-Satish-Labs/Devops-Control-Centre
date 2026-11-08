@@ -1,0 +1,40 @@
+
+name: Run All DevOps Workflows
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  trigger-workflows:
+    name: Trigger Organization Workflows
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Organization Audit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run organization-audit.yml --ref main
+
+      - name: Trigger Repository Discovery
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run repository-discovery.yml --ref main
+
+      - name: Trigger Branch Ruleset Enforcement
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run branch-ruleset-enforcement.yml \
+            --ref main \
+            -f mode=dry-run
+
+      - name: Summary
+        run: |
+          echo "All requested workflows have been dispatched."
+          echo "Report Generation should run automatically after a successful audit."
