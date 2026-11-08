@@ -21,7 +21,7 @@ jobs:
           app-id: ${{ secrets.DCC_APP_ID }}
           private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
           owner: Go-Satish-Labs
-          repositories: DevOps-Control-Center
+          repositories: DevOps-Control-Centre
 
       - name: Trigger All Workflows
         env:
