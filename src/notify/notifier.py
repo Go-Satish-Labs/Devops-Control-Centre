@@ -283,7 +283,7 @@ def run_notifications(client, settings, audit: dict[str, Any], now: datetime | N
             body = render_discussion_body(audit, report_url=report_url, now=now,
                                           stale_after_hours=int(disc_cfg.get("stale_after_hours", 24)))
             result["discussion"] = ensure_daily_discussion(
-                client, org, control, disc_cfg.get("category", "Audit Reports"),
+                client, org, disc_cfg.get("repository") or control, disc_cfg.get("category", "Audit Reports"),
                 f"Daily organization health: {now:%Y-%m-%d}", body)
         except (GitHubAPIError, NotificationError) as exc:
             result["errors"].append(f"discussion: {exc}")
