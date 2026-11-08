@@ -1,10 +1,19 @@
 discussions:
   enabled: true
+  # Must match an existing category in the control repository's Discussions tab.
   category: Audit Reports
+  # Warn in the discussion when the audit data is older than this.
   stale_after_hours: 24
 issues:
   enabled: true
   label: dcc-audit
-  repository: DevOps-Control-Centre
+  # Issues are raised in the control repository (set in config/organization.yml).
+  # Statuses that get an open issue.
   statuses: [FAILED]
+  # Safety cap on new issues per run.
   max_new_per_run: 25
+projects:
+  enabled: true
+  organization: Go-Satish-Labs
+  # The number from your project URL, e.g. github.com/orgs/Go-Satish-Labs/projects/3 → 3
+  project_number: 1
