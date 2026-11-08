@@ -53,7 +53,7 @@ jobs:
           DCC_AUTH_MODE: ${{ steps.app-token.outputs.token != '' && 'github-app' || (secrets.DCC_PAT != '' && 'personal-access-token') || 'github-token-limited' }}
           GITHUB_TOKEN: ${{ github.token }}
           DCC_CONFIRM_ENFORCE: ${{ inputs.confirm }}
-          RULESET_MODE: ${{ github.event_name == 'schedule' && 'dry-run' || inputs.mode || 'dry-run' }}
+          RULESET_MODE: ${{ github.event_name == 'schedule' && 'dry-run' || (inputs.mode == 'enforce' && inputs.confirm != 'ENFORCE' && 'dry-run') || inputs.mode || 'dry-run' }}
         run: python -m src.cli rulesets --mode "$RULESET_MODE" --output build
 
       - name: Upload rulesets report
