@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   actions: read
+  pull-requests: write
 
 concurrency:
   group: dcc-publish
@@ -57,11 +58,12 @@ jobs:
             echo "No report changes to commit."
             exit 0
           fi
-          git commit -m "chore(reports): update organization health [skip ci]"
-          for attempt in 1 2 3; do
-            if git pull --rebase origin "$DEFAULT_BRANCH" && git push origin "HEAD:$DEFAULT_BRANCH"; then
-              exit 0
-            fi
-            sleep $((attempt * 10))
-          done
-          exit 1
+          git commit -m "chore(reports): update organization health"
+          BRANCH="automation/report-update-${GITHUB_RUN_ID}"
+          git switch -c "$BRANCH"
+          git push --set-upstream origin "$BRANCH"
+          GH_TOKEN="${{ github.token }}" gh pr create \
+            --base "$DEFAULT_BRANCH" \
+            --head "$BRANCH" \
+            --title "chore(reports): update organization health" \
+            --body "Automated report update from the successful Organization Audit workflow run ${GITHUB_RUN_ID}."
