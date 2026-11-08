@@ -81,8 +81,10 @@ def cmd_audit(args, settings: Settings) -> int:
 
 
 def cmd_rulesets(args, settings: Settings) -> int:
-    if args.mode == "enforce" and os.environ.get("DCC_CONFIRM_ENFORCE") != ENFORCE_CONFIRMATION:
-        log.error("enforce mode requires confirmation: set DCC_CONFIRM_ENFORCE=%s", ENFORCE_CONFIRMATION)
+    confirmation = os.environ.get("DCC_CONFIRM_ENFORCE", "").strip()
+    if args.mode == "enforce" and confirmation != ENFORCE_CONFIRMATION:
+        log.error("enforce refused: the confirm box must contain ENFORCE (received %d characters)",
+                  len(confirmation))
         return 2
     client, _ = _client(settings)
     discovery = discover_repositories(client, settings.organization, settings)
