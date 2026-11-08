@@ -129,7 +129,9 @@ class GitHubClient:
         payload = response.json()
         if payload.get("errors"):
             message = "; ".join(str(error.get("message", "")) for error in payload["errors"])
-            raise GitHubAPIError(200, f"GraphQL error: {message}", path)
+            # GraphQL can return HTTP 200 with an "errors" payload; don't raise an exception that
+            # misleadingly looks like a successful HTTP status code.
+            raise GitHubAPIError(400, f"GraphQL error (HTTP {response.status_code}): {message}", path)
         return payload.get("data") or {}
 
     # ----------------------------------------------------------------- private
