@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   run-all:
-    name: Trigger All Workflows
+    name: Trigger All DevOps Workflows
     runs-on: ubuntu-latest
 
     steps:
@@ -21,17 +21,35 @@ jobs:
           app-id: ${{ secrets.DCC_APP_ID }}
           private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
           owner: Go-Satish-Labs
-          repositories: DevOps-Control-Centre
 
-      - name: Trigger All Workflows
+      - name: Trigger DevOps Workflows
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          gh workflow run organization-audit.yml --repo Go-Satish-Labs/DevOps-Control-Center --ref main
+          set -e
 
-          gh workflow run repository-discovery.yml --repo Go-Satish-Labs/DevOps-Control-Center --ref main
+          REPO="Go-Satish-Labs/DevOps-Control-Centre"
 
-          gh workflow run branch-ruleset-enforcement.yml --repo Go-Satish-Labs/DevOps-Control-Center --ref main -f mode=dry-run
+          echo "Starting DevOps workflow dispatch..."
 
-      - name: Completed
-        run: echo "All workflows have been dispatched successfully."
+          gh workflow run "Branch Ruleset Enforcement" \
+            --repo "$REPO" --ref main -f mode=ENFORCE
+
+          gh workflow run "Daily Organization Report" \
+            --repo "$REPO" --ref main
+
+          gh workflow run "Organization Audit" \
+            --repo "$REPO" --ref main
+
+          gh workflow run "Report Generation" \
+            --repo "$REPO" --ref main
+
+          gh workflow run "Repository Discovery" \
+            --repo "$REPO" --ref main
+
+          echo "All requested DevOps workflows dispatched."
+
+      - name: Completion Summary
+        run: |
+          echo "## DevOps Workflow Dispatch" >> $GITHUB_STEP_SUMMARY
+          echo "All non-Copilot DevOps workflows have been triggered." >> $GITHUB_STEP_SUMMARY
