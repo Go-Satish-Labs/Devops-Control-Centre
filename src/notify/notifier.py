@@ -54,7 +54,9 @@ def render_discussion_body(audit: dict[str, Any], *, report_url: str, now: datet
         lines += ["> **Warning:** the audit timestamp is missing. Check the Organization Audit workflow.", ""]
     elif (now - stamp).total_seconds() / 3600 > stale_after_hours:
         hours = (now - stamp).total_seconds() / 3600
-        lines += [f"> **Warning:** the latest audit data is about {hours:.0f} hours old. "
+        rounded_hours = int(round(hours))
+        unit = "hour" if rounded_hours == 1 else "hours"
+        lines += [f"> **Warning:** the latest audit data is about {rounded_hours} {unit} old. "
                   "Check the Organization Audit workflow.", ""]
     lines += [
         "## Summary", "", "| Metric | Count |", "|---|---|",
