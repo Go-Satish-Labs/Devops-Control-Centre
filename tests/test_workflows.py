@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import yaml
 
@@ -90,3 +91,12 @@ def test_iter_uses_reads_jobs_and_steps():
         "  b:\n    uses: other/wf/.github/workflows/x.yml@main\n"
     )
     assert set(iter_uses(doc)) == {"actions/checkout@v4", "other/wf/.github/workflows/x.yml@main"}
+
+
+def test_branch_ruleset_enforce_mode_requires_explicit_confirmation():
+    workflow = yaml.safe_load(
+        Path(".github/workflows/branch-ruleset-enforcement.yml").read_text(encoding="utf-8")
+    )
+    evaluate = next(step for step in workflow["jobs"]["rulesets"]["steps"] if step.get("name") == "Evaluate rulesets")
+    mode = evaluate["env"]["RULESET_MODE"]
+    assert "inputs.mode == 'enforce' && inputs.confirm != 'ENFORCE' && 'dry-run'" in mode
