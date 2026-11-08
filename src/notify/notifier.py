@@ -1,4 +1,9 @@
-"""Daily discussion posting and centralized code-issue synchronization."""
+"""Daily discussion post, code-issue synchronisation, and organization project board updates.
+
+Issues are raised in one central repository, so no audited repository is modified.
+Every open issue is also added to an organization-level Project, which is visible
+from the organization's Projects tab.
+"""
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -7,28 +12,49 @@ from typing import Any
 from src.auditors.workflows import parse_time
 from src.github.client import GitHubAPIError
 from src.utils.config import load_yaml
+from src.utils.log import get_logger
 from src.utils.text import md_escape
 
+log = get_logger(__name__)
 ISSUE_TITLE = "[DCC] {name} needs attention"
 LABEL_COLOR = "d73a4a"
 
-REPOSITORY_QUERY = """query($owner: String!, $name: String!) {
+REPOSITORY_QUERY = """
+query($owner: String!, $name: String!) {
   repository(owner: $owner, name: $name) {
     id
     hasDiscussionsEnabled
     discussionCategories(first: 50) { nodes { id name } }
   }
 }"""
-RECENT_DISCUSSIONS_QUERY = """query($owner: String!, $name: String!, $categoryId: ID!) {
+
+RECENT_DISCUSSIONS_QUERY = """
+query($owner: String!, $name: String!, $categoryId: ID!) {
   repository(owner: $owner, name: $name) {
     discussions(first: 30, categoryId: $categoryId, orderBy: {field: CREATED_AT, direction: DESC}) {
       nodes { id title url }
     }
   }
 }"""
-CREATE_DISCUSSION_MUTATION = """mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
+
+CREATE_DISCUSSION_MUTATION = """
+mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
   createDiscussion(input: {repositoryId: $repositoryId, categoryId: $categoryId, title: $title, body: $body}) {
     discussion { id url }
+  }
+}"""
+
+PROJECT_QUERY = """
+query($org: String!, $number: Int!) {
+  organization(login: $org) {
+    projectV2(number: $number) { id title }
+  }
+}"""
+
+ADD_PROJECT_ITEM_MUTATION = """
+mutation($projectId: ID!, $contentId: ID!) {
+  addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+    item { id }
   }
 }"""
 
@@ -43,7 +69,7 @@ def _pct(value: float | None) -> str:
 
 def render_discussion_body(audit: dict[str, Any], *, report_url: str, now: datetime,
                            stale_after_hours: int = 24) -> str:
-    meta, metrics = audit["audit"], audit["metrics"]
+    meta, m = audit["audit"], audit["metrics"]
     stamp = parse_time(meta.get("timestamp"))
     lines = [
         f"Daily summary for **{md_escape(audit['organization'])}**. Data from audit run "
@@ -52,36 +78,37 @@ def render_discussion_body(audit: dict[str, Any], *, report_url: str, now: datet
     ]
     if stamp is None:
         lines += ["> **Warning:** the audit timestamp is missing. Check the Organization Audit workflow.", ""]
-    elif (now - stamp).total_seconds() / 3600 > stale_after_hours:
+    else:
         hours = (now - stamp).total_seconds() / 3600
-        rounded_hours = int(round(hours))
-        unit = "hour" if rounded_hours == 1 else "hours"
-        lines += [f"> **Warning:** the latest audit data is about {rounded_hours} {unit} old. "
-                  "Check the Organization Audit workflow.", ""]
+        if hours > stale_after_hours:
+            lines += [f"> **Warning:** the latest audit data is about {hours:.0f} hours old. "
+                      "Check the Organization Audit workflow.", ""]
     lines += [
-        "## Summary", "", "| Metric | Count |", "|---|---|",
-        f"| Audited | {audit['discovery']['audited']} |", f"| Healthy | {metrics['healthy']} |",
-        f"| Warning | {metrics['warning']} |", f"| Failed | {metrics['failed']} |",
-        f"| Without CI/CD | {metrics['no_ci']} |", f"| Unknown | {metrics['unknown']} |",
-        f"| Organization health | {_pct(metrics['health_percent'])} |", "",
-        f"Full report: {report_url}", "", "## Needs attention",
+        "## Summary", "",
+        "| Metric | Count |", "|---|---|",
+        f"| Audited | {audit['discovery']['audited']} |",
+        f"| Healthy | {m['healthy']} |",
+        f"| Warning | {m['warning']} |",
+        f"| Failed | {m['failed']} |",
+        f"| Without CI/CD | {m['no_ci']} |",
+        f"| Unknown | {m['unknown']} |",
+        f"| Organization health | {_pct(m['health_percent'])} |",
+        "",
+        f"Full report: {report_url}",
+        "",
+        "## Needs attention",
     ]
     issues = audit.get("recent_issues", [])
     if issues:
-        lines.extend(
-            f"- **{item['severity']}** `{md_escape(item['repository'])}`: "
-            f"{md_escape(item['area'])}, {md_escape(item['message'])}"
-            for item in issues[:10]
-        )
+        for item in issues[:10]:
+            lines.append(f"- **{item['severity']}** `{md_escape(item['repository'])}`: "
+                         f"{md_escape(item['area'])}, {md_escape(item['message'])}")
     else:
         lines.append("No issues recorded in this audit.")
     lines += ["", "## Recommendations"]
-    recommendations = audit.get("recommendations", [])
-    if recommendations:
-        lines.extend(f"- **{item['priority'].upper()}**: {md_escape(item['message'])}"
-                     for item in recommendations[:5])
-    else:
-        lines.append("No recommendations for this audit.")
+    recs = audit.get("recommendations", [])
+    lines += [f"- **{r['priority'].upper()}**: {md_escape(r['message'])}" for r in recs[:5]] or \
+        ["No recommendations for this audit."]
     lines += ["", "_Automatically generated by DevOps-Control-Center. Failing repositories also have issues._"]
     return "\n".join(lines)
 
@@ -92,19 +119,18 @@ def ensure_daily_discussion(client, owner: str, repo: str, category_name: str, t
     if not repo_data:
         raise NotificationError(f"control repository {owner}/{repo} not found or not accessible")
     if not repo_data.get("hasDiscussionsEnabled"):
-        raise NotificationError("Discussions are disabled; enable them in repository settings")
+        raise NotificationError("Discussions are disabled. Enable them in repository Settings → General → Features")
     categories = repo_data["discussionCategories"]["nodes"]
-    category = next((item for item in categories if item["name"] == category_name), None)
+    category = next((c for c in categories if c["name"] == category_name), None)
     if category is None:
-        raise NotificationError(f"discussion category '{category_name}' not found")
-    recent = client.graphql(
-        RECENT_DISCUSSIONS_QUERY,
-        {"owner": owner, "name": repo, "categoryId": category["id"]},
-    )
+        raise NotificationError(f"discussion category '{category_name}' not found; create it under Discussions → Categories")
+
+    recent = client.graphql(RECENT_DISCUSSIONS_QUERY, {"owner": owner, "name": repo, "categoryId": category["id"]})
     nodes = ((recent.get("repository") or {}).get("discussions") or {}).get("nodes", [])
     for node in nodes:
         if node["title"] == title:
             return {"action": "exists", "url": node["url"]}
+
     created = client.graphql(CREATE_DISCUSSION_MUTATION, {
         "repositoryId": repo_data["id"], "categoryId": category["id"], "title": title, "body": body,
     })
@@ -112,20 +138,37 @@ def ensure_daily_discussion(client, owner: str, repo: str, category_name: str, t
     return {"action": "created", "url": discussion["url"]}
 
 
+def resolve_project_id(client, org: str, number: int) -> str:
+    data = client.graphql(PROJECT_QUERY, {"org": org, "number": number})
+    project = ((data.get("organization") or {}).get("projectV2")) or None
+    if not project:
+        raise NotificationError(
+            f"project #{number} not found in {org}; check project_number in config/notifications.yml "
+            "and that the App has Organization → Projects: Read and write")
+    return project["id"]
+
+
+def add_to_project(client, project_id: str, content_id: str) -> None:
+    client.graphql(ADD_PROJECT_ITEM_MUTATION, {"projectId": project_id, "contentId": content_id})
+
+
 def render_issue_body(repo: dict[str, Any], audit: dict[str, Any], report_url: str) -> str:
     meta = audit["audit"]
     lines = [
         f"Repository **{md_escape(repo['name'])}** is classified **{repo['overall']}** in audit run "
-        f"`{md_escape(meta['run_id'])}` ({md_escape(meta['timestamp'])} UTC).", "", "## Reasons",
+        f"`{md_escape(meta['run_id'])}` ({md_escape(meta['timestamp'])} UTC).",
+        "", "## Reasons",
     ]
     lines += [f"- {md_escape(reason)}" for reason in repo.get("reasons", [])] or ["- None recorded."]
     lines += ["", "## Findings"]
-    lines += [f"- **{item['severity']}** {md_escape(item['area'])}: {md_escape(item['message'])}"
-              for item in repo.get("findings", [])] or ["- No detailed findings recorded."]
-    lines += ["", "## Next steps",
-              "1. Resolve the findings above in the repository.",
-              "2. This issue closes automatically once the repository is no longer flagged by the audit.",
-              "", f"Full report: {report_url}"]
+    lines += [f"- **{f['severity']}** {md_escape(f['area'])}: {md_escape(f['message'])}"
+              for f in repo.get("findings", [])] or ["- No detailed findings recorded."]
+    lines += [
+        "", "## Next steps",
+        "1. Resolve the findings above in the repository.",
+        "2. This issue closes automatically once the repository is no longer flagged by the audit.",
+        "", f"Full report: {report_url}",
+    ]
     return "\n".join(lines)
 
 
@@ -135,24 +178,29 @@ def _ensure_label(client, owner: str, repo: str, label: str) -> None:
             "name": label, "color": LABEL_COLOR, "description": "Raised by DevOps-Control-Center",
         })
     except GitHubAPIError as exc:
-        if exc.status_code != 422:
+        if exc.status_code != 422:  # 422 means the label already exists
             raise
 
 
 def sync_issues(client, owner: str, repo: str, audit: dict[str, Any], cfg: dict[str, Any],
-                report_url: str) -> dict[str, int]:
+                report_url: str, project_id: str | None = None) -> dict[str, int]:
     label = cfg.get("label", "dcc-audit")
     statuses = set(cfg.get("statuses", ["FAILED"]))
     cap = int(cfg.get("max_new_per_run", 25))
     base = f"/repos/{owner}/{repo}/issues"
     _ensure_label(client, owner, repo, label)
+
     existing: dict[str, dict[str, Any]] = {}
     for item in client.paginate(base, params={"labels": label, "state": "all"}):
-        if "pull_request" not in item:
-            existing.setdefault(item["title"], item)
-    wanted = {ISSUE_TITLE.format(name=item["name"]): item
-              for item in audit.get("repositories", []) if item["overall"] in statuses}
-    summary = {"created": 0, "updated": 0, "reopened": 0, "closed": 0, "deferred": 0}
+        if "pull_request" in item:
+            continue
+        existing.setdefault(item["title"], item)  # newest first, so keep the most recent
+
+    wanted = {ISSUE_TITLE.format(name=r["name"]): r for r in audit.get("repositories", [])
+              if r["overall"] in statuses}
+    summary = {"created": 0, "updated": 0, "reopened": 0, "closed": 0, "deferred": 0, "added_to_project": 0}
+    flagged_nodes: list[str] = []
+
     for title, entry in wanted.items():
         body = render_issue_body(entry, audit, report_url)
         issue = existing.get(title)
@@ -160,8 +208,10 @@ def sync_issues(client, owner: str, repo: str, audit: dict[str, Any], cfg: dict[
             if summary["created"] >= cap:
                 summary["deferred"] += 1
                 continue
-            client.post_json(base, {"title": title, "body": body, "labels": [label]})
+            created = client.post_json(base, {"title": title, "body": body, "labels": [label]})
             summary["created"] += 1
+            if created.get("node_id"):
+                flagged_nodes.append(created["node_id"])
             continue
         patch: dict[str, Any] = {}
         if issue["state"] == "closed":
@@ -172,6 +222,9 @@ def sync_issues(client, owner: str, repo: str, audit: dict[str, Any], cfg: dict[
             summary["updated"] += 1
         if patch:
             client.patch_json(f"{base}/{issue['number']}", patch)
+        if issue.get("node_id"):
+            flagged_nodes.append(issue["node_id"])
+
     for title, issue in existing.items():
         if title in wanted or issue["state"] != "open":
             continue
@@ -179,6 +232,11 @@ def sync_issues(client, owner: str, repo: str, audit: dict[str, Any], cfg: dict[
                          {"body": "Resolved: this repository is no longer flagged by the latest audit."})
         client.patch_json(f"{base}/{issue['number']}", {"state": "closed", "state_reason": "completed"})
         summary["closed"] += 1
+
+    if project_id:
+        for node_id in flagged_nodes:
+            add_to_project(client, project_id, node_id)
+            summary["added_to_project"] += 1
     return summary
 
 
@@ -191,29 +249,32 @@ def _default_branch(client, owner: str, repo: str) -> str:
 
 def run_notifications(client, settings, audit: dict[str, Any], now: datetime | None = None) -> dict[str, Any]:
     now = now or datetime.now(timezone.utc)
-    config = load_yaml("notifications.yml")
-    discussion_config = config.get("discussions", {})
-    issue_config = config.get("issues", {})
-    owner, control = settings.organization, settings.control_repository
-    branch = _default_branch(client, owner, control)
-    report_url = f"https://github.com/{owner}/{control}/blob/{branch}/reports/organization-health.md"
-    issue_repo = issue_config.get("repository") or control
+    cfg = load_yaml("notifications.yml")
+    disc_cfg, iss_cfg = cfg.get("discussions", {}), cfg.get("issues", {})
+    proj_cfg = cfg.get("projects", {})
+    org, control = settings.organization, settings.control_repository
+    branch = _default_branch(client, org, control)
+    report_url = f"https://github.com/{org}/{control}/blob/{branch}/reports/organization-health.md"
+    issues_repo = control
     result: dict[str, Any] = {"discussion": None, "issues": None, "errors": []}
-    if discussion_config.get("enabled", True):
+
+    if disc_cfg.get("enabled", True):
         try:
-            body = render_discussion_body(
-                audit, report_url=report_url, now=now,
-                stale_after_hours=int(discussion_config.get("stale_after_hours", 24)),
-            )
+            body = render_discussion_body(audit, report_url=report_url, now=now,
+                                          stale_after_hours=int(disc_cfg.get("stale_after_hours", 24)))
             result["discussion"] = ensure_daily_discussion(
-                client, owner, control, discussion_config.get("category", "Audit Reports"),
-                f"Daily organization health: {now:%Y-%m-%d}", body,
-            )
+                client, org, control, disc_cfg.get("category", "Audit Reports"),
+                f"Daily organization health: {now:%Y-%m-%d}", body)
         except (GitHubAPIError, NotificationError) as exc:
             result["errors"].append(f"discussion: {exc}")
-    if issue_config.get("enabled", True):
+
+    if iss_cfg.get("enabled", True):
         try:
-            result["issues"] = sync_issues(client, owner, issue_repo, audit, issue_config, report_url)
-        except (GitHubAPIError, NotificationError) as exc:
+            project_id = None
+            if proj_cfg.get("enabled", False):
+                project_id = resolve_project_id(
+                    client, proj_cfg.get("organization", org), int(proj_cfg["project_number"]))
+            result["issues"] = sync_issues(client, org, issues_repo, audit, iss_cfg, report_url, project_id)
+        except (GitHubAPIError, NotificationError, KeyError, ValueError) as exc:
             result["errors"].append(f"issues: {exc}")
     return result
