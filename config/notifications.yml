@@ -1,0 +1,10 @@
+discussions:
+  enabled: true
+  category: Audit Reports
+  stale_after_hours: 24
+issues:
+  enabled: true
+  label: dcc-audit
+  repository: DevOps-Control-Center
+  statuses: [FAILED]
+  max_new_per_run: 25

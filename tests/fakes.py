@@ -6,11 +6,13 @@ from src.health import scoring
 class FakeClient:
     """Routes by exact path. Unknown paths behave like GitHub 404 responses."""
 
-    def __init__(self, routes=None, lists=None):
+    def __init__(self, routes=None, lists=None, graphql=None):
         self.routes = dict(routes or {})
         self.lists = dict(lists or {})
         self.posts: list[tuple[str, dict]] = []
+        self.patches: list[tuple[str, dict]] = []
         self.request_count = 0
+        self._graphql = graphql
 
     def get_json(self, path, params=None):
         value = self.routes.get(path)
@@ -30,7 +32,16 @@ class FakeClient:
 
     def post_json(self, path, body):
         self.posts.append((path, body))
-        return {"id": len(self.posts)}
+        return {"id": len(self.posts), "number": len(self.posts)}
+
+    def patch_json(self, path, body):
+        self.patches.append((path, body))
+        return {}
+
+    def graphql(self, query, variables=None):
+        if self._graphql is None:
+            raise GitHubAPIError(404, "no GraphQL handler", "/graphql")
+        return self._graphql(query, variables or {})
 
 
 def repo_dict(name="r", overall="HEALTHY", ci="HEALTHY", security="OK", branch="COMPLIANT",

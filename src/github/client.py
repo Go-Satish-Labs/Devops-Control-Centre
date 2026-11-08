@@ -117,6 +117,21 @@ class GitHubClient:
             url = response.links.get("next", {}).get("url")
             current = None
 
+    def patch_json(self, path: str, body: dict) -> Any:
+        response = self.request("PATCH", path, json_body=body)
+        self._raise_for_status(response, path)
+        return response.json()
+
+    def graphql(self, query: str, variables: dict | None = None) -> dict:
+        path = "/graphql"
+        response = self.request("POST", path, json_body={"query": query, "variables": variables or {}})
+        self._raise_for_status(response, path)
+        payload = response.json()
+        if payload.get("errors"):
+            message = "; ".join(str(error.get("message", "")) for error in payload["errors"])
+            raise GitHubAPIError(200, f"GraphQL error: {message}", path)
+        return payload.get("data") or {}
+
     # ----------------------------------------------------------------- private
     @staticmethod
     def _is_rate_limited(response) -> bool:

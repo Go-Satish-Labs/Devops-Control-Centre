@@ -5,18 +5,21 @@
     python -m src.cli discover --output build
     python -m src.cli validate --source build
     python -m src.cli publish --source build --target .
+    python -m src.cli notify --source reports/organization-health.json --output build
 """
 from __future__ import annotations
 
 import argparse
 import json
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 
 from src.audit_runner import run_audit
 from src.discovery.repositories import discover_repositories, new_repository_names, public_identifier
 from src.github.auth import AuthError, resolve_credentials
 from src.github.client import GitHubAPIError, GitHubClient
+from src.notify.notifier import run_notifications
 from src.reporting.csv_generator import render_csv
 from src.reporting.json_generator import render_json
 from src.reporting.markdown_generator import render_markdown
@@ -139,6 +142,33 @@ def cmd_publish(args, settings: Settings) -> int:
     return 0
 
 
+def cmd_notify(args, settings: Settings) -> int:
+    source = Path(args.source)
+    if not source.is_file():
+        log.error("no audit report at %s; run the Organization Audit first", source)
+        return 1
+    audit = json.loads(source.read_text(encoding="utf-8"))
+    client, _ = _client(settings)
+    result = run_notifications(client, settings, audit, datetime.now(timezone.utc))
+    _write(Path(args.output) / "notifications.json", json.dumps(result, indent=2, default=str) + "\n")
+    lines = ["## Daily notifications", ""]
+    lines.append(
+        f"- Discussion: {result['discussion']['action']} {result['discussion']['url']}"
+        if result["discussion"] else "- Discussion: not posted"
+    )
+    if result["issues"]:
+        issues = result["issues"]
+        lines.append(
+            f"- Issues: created {issues['created']}, updated {issues['updated']}, "
+            f"reopened {issues['reopened']}, closed {issues['closed']}, deferred {issues['deferred']}"
+        )
+    lines.extend(f"- Error: {error}" for error in result["errors"])
+    write_step_summary("\n".join(lines))
+    for error in result["errors"]:
+        log.error(error)
+    return 1 if result["errors"] else 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="dcc", description="DevOps-Control-Center")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -155,12 +185,15 @@ def build_parser() -> argparse.ArgumentParser:
     publish_cmd = sub.add_parser("publish", help="validate and copy artifacts into the repository")
     publish_cmd.add_argument("--source", default="build")
     publish_cmd.add_argument("--target", default=".")
+    notify = sub.add_parser("notify", help="post the daily discussion and sync code issues")
+    notify.add_argument("--source", default="reports/organization-health.json")
+    notify.add_argument("--output", default="build")
     return parser
 
 
 HANDLERS = {
     "audit": cmd_audit, "rulesets": cmd_rulesets, "discover": cmd_discover,
-    "validate": cmd_validate, "publish": cmd_publish,
+    "validate": cmd_validate, "publish": cmd_publish, "notify": cmd_notify,
 }
 
 
