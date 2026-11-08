@@ -1,8 +1,13 @@
-
 name: Run All DevOps Workflows
 
 on:
   workflow_dispatch:
+    inputs:
+      ruleset_mode:
+        description: "Ruleset mode. dry-run is safe. To enforce, run Branch Ruleset Enforcement by itself."
+        type: choice
+        options: [dry-run, audit-only]
+        default: dry-run
 
 permissions:
   actions: write
@@ -10,9 +15,8 @@ permissions:
 
 jobs:
   run-all:
-    name: Trigger All DevOps Workflows
+    name: Trigger all DevOps workflows
     runs-on: ubuntu-latest
-
     steps:
       - name: Generate GitHub App Token
         id: app-token
@@ -22,34 +26,39 @@ jobs:
           private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
           owner: Go-Satish-Labs
 
-      - name: Trigger DevOps Workflows
+      - name: Trigger DevOps workflows
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO: Go-Satish-Labs/Devops-Control-Centre
+          RULESET_MODE: ${{ inputs.ruleset_mode }}
         run: |
-          set -e
+          failures=0
 
-          REPO="Go-Satish-Labs/DevOps-Control-Centre"
+          dispatch() {
+            local name="$1"
+            shift
+            if gh workflow run "$name" --repo "$REPO" --ref main "$@"; then
+              echo "dispatched: $name"
+            else
+              echo "FAILED to dispatch: $name"
+              failures=$((failures + 1))
+            fi
+          }
 
-          echo "Starting DevOps workflow dispatch..."
+          dispatch "Organization Audit"
+          dispatch "Repository Discovery"
+          dispatch "Branch Ruleset Enforcement" -f mode="$RULESET_MODE"
+          dispatch "Daily Organization Report"
 
-          gh workflow run "Branch Ruleset Enforcement" \
-            --repo "$REPO" --ref main -f mode=enforce
+          {
+            echo "## DevOps workflow dispatch"
+            echo ""
+            echo "- Ruleset mode: $RULESET_MODE"
+            echo "- Failed dispatches: $failures"
+            echo ""
+            echo "Organization Audit runs first. Daily Organization Report reads the committed report,"
+            echo "so it posts the previous audit's data unless it runs after the audit finishes."
+            echo "Report Generation runs automatically after a successful audit."
+          } >> "$GITHUB_STEP_SUMMARY"
 
-          gh workflow run "Daily Organization Report" \
-            --repo "$REPO" --ref main
-
-          gh workflow run "Organization Audit" \
-            --repo "$REPO" --ref main
-
-          gh workflow run "Report Generation" \
-            --repo "$REPO" --ref main
-
-          gh workflow run "Repository Discovery" \
-            --repo "$REPO" --ref main
-
-          echo "All requested DevOps workflows dispatched."
-
-      - name: Completion Summary
-        run: |
-          echo "## DevOps Workflow Dispatch" >> $GITHUB_STEP_SUMMARY
-          echo "All non-Copilot DevOps workflows have been triggered." >> $GITHUB_STEP_SUMMARY
+          [ "$failures" -eq 0 ]
