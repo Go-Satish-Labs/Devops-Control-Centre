@@ -1,6 +1,8 @@
 discussions:
   enabled: true
-  # Must match an existing category in the control repository's Discussions tab.
+  # Repository where the daily post goes. Use .github so it shows on the organization page.
+  repository: .github
+  # Must match an existing category in that repository's Discussions tab.
   category: Audit Reports
   # Warn in the discussion when the audit data is older than this.
   stale_after_hours: 24
@@ -15,5 +17,5 @@ issues:
 projects:
   enabled: true
   organization: Go-Satish-Labs
-  # The number from your project URL, e.g. github.com/orgs/Go-Satish-Labs/projects/3 → 3
+  # The number from your project URL.
   project_number: 1
