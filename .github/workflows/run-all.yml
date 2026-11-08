@@ -33,7 +33,7 @@ jobs:
           echo "Starting DevOps workflow dispatch..."
 
           gh workflow run "Branch Ruleset Enforcement" \
-            --repo "$REPO" --ref main -f mode=ENFORCE
+            --repo "$REPO" --ref main -f mode=enforce
 
           gh workflow run "Daily Organization Report" \
             --repo "$REPO" --ref main
