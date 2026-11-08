@@ -9,32 +9,29 @@ permissions:
   contents: read
 
 jobs:
-  trigger-workflows:
-    name: Trigger Organization Workflows
+  run-all:
+    name: Trigger All Workflows
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger Organization Audit
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh workflow run organization-audit.yml --ref main
+      - name: Generate GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.DCC_APP_ID }}
+          private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
+          owner: Go-Satish-Labs
+          repositories: DevOps-Control-Center
 
-      - name: Trigger Repository Discovery
+      - name: Trigger All Workflows
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          gh workflow run repository-discovery.yml --ref main
+          gh workflow run organization-audit.yml --repo Go-Satish-Labs/DevOps-Control-Center --ref main
 
-      - name: Trigger Branch Ruleset Enforcement
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh workflow run branch-ruleset-enforcement.yml \
-            --ref main \
-            -f mode=dry-run
+          gh workflow run repository-discovery.yml --repo Go-Satish-Labs/DevOps-Control-Center --ref main
 
-      - name: Summary
-        run: |
-          echo "All requested workflows have been dispatched."
-          echo "Report Generation should run automatically after a successful audit."
+          gh workflow run branch-ruleset-enforcement.yml --repo Go-Satish-Labs/DevOps-Control-Center --ref main -f mode=dry-run
+
+      - name: Completed
+        run: echo "All workflows have been dispatched successfully."
