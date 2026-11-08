@@ -140,6 +140,9 @@ def ensure_daily_discussion(client, owner: str, repo: str, category_name: str, t
 
 def resolve_project_id(client, org: str, number: int) -> str:
     data = client.graphql(PROJECT_QUERY, {"org": org, "number": number})
-    project = ((data.get("organization") or {}).get("projectV2")) or None
+    project = (data.get("organization") or {}).get("projectV2")
     if not project:
-        raise NotificationError(
+        message = (f"project #{number} not found in {org}. Check project_number in "
+                   "config/notifications.yml and that the App has Organization Projects read and write.")
+        raise NotificationError(message)
+    return project["id"]
