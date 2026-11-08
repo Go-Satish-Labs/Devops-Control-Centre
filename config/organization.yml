@@ -1,6 +1,6 @@
 # Organization-level settings for DevOps-Control-Center.
 organization: Go-Satish-Labs
-control_repository: DevOps-Control-Center
+control_repository: DevOps-Control-Centre
 api_base_url: https://api.github.com
 request_timeout: 30
 max_retries: 4
