@@ -84,4 +84,4 @@ def test_discussion_is_created_once_per_day():
 def test_discussion_body_warns_when_audit_is_stale():
     audit = make_audit([repo_dict(name="payments", overall="FAILED")])
     body = render_discussion_body(audit, report_url=URL, now=NOW, stale_after_hours=0)
-    assert "latest audit data is about 1 hours old" in body
+    assert "latest audit data is about 1 hour old" in body
