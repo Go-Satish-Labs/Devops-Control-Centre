@@ -1,22 +1,24 @@
-name: Repository gene
+name: Report Generation
 
+# Runs only after a successful Organization Audit. Validates the artifacts, copies them
+# into the repository and commits them when their content changed.
 on:
-  schedule:
-    - cron: "5 1 * * *"
-  workflow_dispatch:
-  repository_dispatch:
-    types: [repository-created]
+  workflow_run:
+    workflows: ["Organization Audit"]
+    types: [completed]
 
 permissions:
-  contents: read
+  contents: write
+  actions: read
 
 concurrency:
-  group: dcc-discovery
+  group: dcc-publish
   cancel-in-progress: false
 
 jobs:
-  discover:
-    name: Discover repositories
+  publish:
+    name: Validate and publish reports
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -30,27 +32,36 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Create GitHub App installation token
-        id: app-token
-        continue-on-error: true
-        uses: actions/create-github-app-token@v1
+      - name: Download audit output
+        uses: actions/download-artifact@v4
         with:
-          app-id: ${{ secrets.DCC_APP_ID }}
-          private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
-          owner: Go-Satish-Labs
+          name: dcc-audit-output
+          path: build
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
 
-      - name: Discover repositories
+      - name: Validate artifacts
+        run: python -m src.cli validate --source build
+
+      - name: Publish artifacts
+        run: python -m src.cli publish --source build --target .
+
+      - name: Commit changed artifacts
         env:
-          DCC_TOKEN: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || '' }}
-          DCC_AUTH_MODE: ${{ steps.app-token.outputs.token != '' && 'github-app' || (secrets.DCC_PAT != '' && 'personal-access-token') || 'github-token-limited' }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: python -m src.cli discover --output build
-
-      - name: Upload discovery output
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: dcc-discovery-output
-          path: build/
-          retention-days: 14
-          if-no-files-found: ignore
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          git config user.name "devops-control-center[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets reports
+          if git diff --cached --quiet; then
+            echo "No report changes to commit."
+            exit 0
+          fi
+          git commit -m "chore(reports): update organization health [skip ci]"
+          for attempt in 1 2 3; do
+            if git pull --rebase origin "$DEFAULT_BRANCH" && git push origin "HEAD:$DEFAULT_BRANCH"; then
+              exit 0
+            fi
+            sleep $((attempt * 10))
+          done
+          exit 1
