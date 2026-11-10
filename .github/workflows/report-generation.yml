@@ -71,7 +71,7 @@ jobs:
             exit 0
           fi
           git commit -m "chore(reports): update organization health"
-          BRANCH="automation/report-update-${GITHUB_RUN_ID}"
+          BRANCH="automation/report-update-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           git switch -c "$BRANCH"
           git push --set-upstream origin "$BRANCH"
           gh pr create \
