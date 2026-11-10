@@ -9,11 +9,11 @@
       "repositories": 7
     },
     {
-      "message": "security_and_analysis not visible to the token",
+      "message": "Code scanning alerts inaccessible",
       "repositories": 5
     },
     {
-      "message": "Code scanning alerts inaccessible",
+      "message": "security_and_analysis not visible to the token",
       "repositories": 5
     }
   ],
@@ -21,11 +21,11 @@
     "api_requests": 131,
     "auth_mode": "github-app",
     "completeness_percent": 81.2,
-    "duration_seconds": 29.4,
+    "duration_seconds": 25.5,
     "mode": "audit-only",
-    "run_id": "42767163319",
+    "run_id": "42774053496",
     "status": "PARTIAL",
-    "timestamp": "2026-11-10T06:14:33+00:00"
+    "timestamp": "2026-11-10T07:15:54+00:00"
   },
   "branch_protection": {
     "compliance_percent": 83.3,
@@ -38,9 +38,9 @@
     ]
   },
   "ci_statistics": {
-    "evaluated": 4,
+    "evaluated": 3,
     "latest_failed": 0,
-    "latest_success": 4,
+    "latest_success": 3,
     "repeated_failures": 0,
     "success_percent": 100.0
   },
@@ -662,17 +662,21 @@
         "failed_jobs": [],
         "findings": [
           {
+            "message": "latest run is still in progress",
+            "severity": "WARNING"
+          },
+          {
             "message": "no automated test step detected",
             "severity": "WARNING"
           }
         ],
         "invalid_files": [],
-        "latest_conclusion": "success",
-        "latest_run_at": "2026-11-10T06:14:28Z",
-        "latest_run_id": 42767175286,
-        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/42767175286",
+        "latest_conclusion": "in_progress",
+        "latest_run_at": "2026-11-10T07:15:44Z",
+        "latest_run_id": 42774053496,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/42774053496",
         "recent_cancellations": 0,
-        "recent_failures": 4,
+        "recent_failures": 3,
         "recent_runs": 20,
         "stale": false,
         "status": "WARNING",
@@ -694,6 +698,11 @@
       },
       "errors": [],
       "findings": [
+        {
+          "area": "CI/CD",
+          "message": "latest run is still in progress",
+          "severity": "WARNING"
+        },
         {
           "area": "CI/CD",
           "message": "no automated test step detected",

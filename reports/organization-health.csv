@@ -3,7 +3,7 @@ repository,visibility,archived,fork,default_branch,primary_language,overall,ci_s
 api,public,no,no,main,Python,NO_CI,NO_CI,,WARNING,partial,COMPLIANT,none,WARNING,3,no CI/CD workflows
 Book_Reader,public,no,no,main,JavaScript,NO_CI,NO_CI,,WARNING,partial,COMPLIANT,none,CONFIGURED,2,no CI/CD workflows
 Central-Communication,public,no,no,main,Python,NO_CI,NO_CI,,WARNING,partial,COMPLIANT,none,NOT_CONFIGURED,2,no CI/CD workflows
-Devops-Control-Centre,public,no,no,main,Python,WARNING,WARNING,success,WARNING,partial,NON_COMPLIANT,would_create,CONFIGURED,4,CI/CD warnings; security warnings; default branch not protected
+Devops-Control-Centre,public,no,no,main,Python,WARNING,WARNING,in_progress,WARNING,partial,NON_COMPLIANT,would_create,CONFIGURED,5,CI/CD warnings; security warnings; default branch not protected
 Discover,public,no,no,main,HTML,NO_CI,NO_CI,,WARNING,partial,COMPLIANT,none,CONFIGURED,2,no CI/CD workflows
 private-455b6861,private,no,no,main,HTML,NO_CI,NO_CI,,UNKNOWN,unknown,UNKNOWN,none,NOT_CONFIGURED,1,no CI/CD workflows
 private-aa818c64,private,no,no,main,TypeScript,UNKNOWN,WARNING,success,WARNING,unknown,UNKNOWN,none,NOT_CONFIGURED,3,incomplete data for branch protection
