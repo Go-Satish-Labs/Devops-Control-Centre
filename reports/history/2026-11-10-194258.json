@@ -1,0 +1,1611 @@
+{
+  "api_limitations": [
+    {
+      "message": "Dependabot alerts inaccessible",
+      "repositories": 13
+    },
+    {
+      "message": "Code scanning alerts not enabled or unsupported",
+      "repositories": 8
+    },
+    {
+      "message": "security_and_analysis not visible to the token",
+      "repositories": 5
+    },
+    {
+      "message": "Code scanning alerts inaccessible",
+      "repositories": 5
+    }
+  ],
+  "audit": {
+    "api_requests": 137,
+    "auth_mode": "github-app",
+    "completeness_percent": 82.7,
+    "duration_seconds": 34.8,
+    "mode": "audit-only",
+    "run_id": "42887997116",
+    "status": "PARTIAL",
+    "timestamp": "2026-11-10T19:42:58+00:00"
+  },
+  "branch_protection": {
+    "compliance_percent": 100.0,
+    "compliant": 6,
+    "evaluated": 6,
+    "non_compliant": 0,
+    "scope": "repository",
+    "scope_notes": [
+      "organization rulesets permission; using repository-level rulesets"
+    ]
+  },
+  "ci_statistics": {
+    "evaluated": 3,
+    "latest_failed": 0,
+    "latest_success": 3,
+    "repeated_failures": 0,
+    "success_percent": 100.0
+  },
+  "completeness": {
+    "checks_completed": 43,
+    "checks_total": 52,
+    "percent": 82.7
+  },
+  "control_repository": "DevOps-Control-Centre",
+  "discovery": {
+    "archived": 0,
+    "audited": 13,
+    "excluded": 0,
+    "forks": 0,
+    "private": 5,
+    "public": 8,
+    "total_discovered": 13,
+    "without_ci": 9
+  },
+  "environment_statistics": {
+    "configured": 3,
+    "coverage_percent": 100.0,
+    "not_configured": 8,
+    "organization_secrets": {
+      "availability": "available",
+      "secret_count": 0
+    },
+    "warnings": 2
+  },
+  "excluded_repositories": [],
+  "latest_failures": [],
+  "metrics": {
+    "applicable": 13,
+    "audited": 13,
+    "failed": 0,
+    "health_percent": 0.0,
+    "healthy": 0,
+    "no_ci": 9,
+    "not_applicable": 0,
+    "unknown": 2,
+    "warning": 2
+  },
+  "organization": "Go-Satish-Labs",
+  "recent_issues": [
+    {
+      "area": "Branch protection",
+      "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+      "repository": "private-455b6861",
+      "severity": "UNKNOWN"
+    },
+    {
+      "area": "Branch protection",
+      "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+      "repository": "private-aa818c64",
+      "severity": "UNKNOWN"
+    },
+    {
+      "area": "Branch protection",
+      "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+      "repository": "private-caac64ed",
+      "severity": "UNKNOWN"
+    },
+    {
+      "area": "Branch protection",
+      "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+      "repository": "private-fd484fa5",
+      "severity": "UNKNOWN"
+    },
+    {
+      "area": "Branch protection",
+      "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+      "repository": "private-fd903b1f",
+      "severity": "UNKNOWN"
+    },
+    {
+      "area": "CI/CD",
+      "message": "no automated test step detected",
+      "repository": ".github",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Secret scanning is disabled",
+      "repository": ".github",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Push protection is disabled",
+      "repository": ".github",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Environment",
+      "message": "1 production-like environment(s) lack reviewers, wait timers or branch restrictions",
+      "repository": "api",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Secret scanning is disabled",
+      "repository": "api",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Push protection is disabled",
+      "repository": "api",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Secret scanning is disabled",
+      "repository": "Book_Reader",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Push protection is disabled",
+      "repository": "Book_Reader",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Secret scanning is disabled",
+      "repository": "Central-Communication",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Push protection is disabled",
+      "repository": "Central-Communication",
+      "severity": "WARNING"
+    }
+  ],
+  "recommendations": [
+    {
+      "message": "Add CI/CD workflows to 9 repository(ies) without them.",
+      "priority": "medium"
+    },
+    {
+      "message": "Add reviewers, wait timers or branch restrictions to 2 repository(ies) with unprotected production environments.",
+      "priority": "medium"
+    },
+    {
+      "message": "Grant the audit token the missing read permissions to complete coverage; see api_limitations.",
+      "priority": "medium"
+    }
+  ],
+  "repositories": [
+    {
+      "archived": false,
+      "branch": {
+        "action": "skip",
+        "existing_ruleset_count": 0,
+        "reason": "excluded or write-protected by configuration",
+        "scope": "repository",
+        "status": "EXCLUDED"
+      },
+      "ci": {
+        "active_workflows": 1,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [
+          {
+            "message": "no automated test step detected",
+            "severity": "WARNING"
+          }
+        ],
+        "invalid_files": [],
+        "latest_conclusion": "success",
+        "latest_run_at": "2026-11-10T11:28:12Z",
+        "latest_run_id": 42807713278,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/.github/actions/runs/42807713278",
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 20,
+        "stale": false,
+        "status": "WARNING",
+        "tests_configured": false,
+        "workflow_count": 1
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 0,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 2,
+        "status": "NOT_CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "CI/CD",
+          "message": "no automated test step detected",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Secret scanning is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Push protection is disabled",
+          "severity": "WARNING"
+        }
+      ],
+      "fork": false,
+      "name": ".github",
+      "overall": "WARNING",
+      "primary_language": "Python",
+      "reasons": [
+        "CI/CD warnings",
+        "security warnings"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "not_enabled",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "partial",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "disabled",
+          "push_protection": "disabled",
+          "secret_scanning": "disabled"
+        },
+        "findings": [
+          {
+            "message": "Secret scanning is disabled",
+            "severity": "WARNING"
+          },
+          {
+            "message": "Push protection is disabled",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts not enabled or unsupported"
+        ],
+        "status": "WARNING",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": "https://github.com/Go-Satish-Labs/.github",
+      "visibility": "public"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
+        "scope": "repository",
+        "status": "COMPLIANT"
+      },
+      "ci": {
+        "active_workflows": 0,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [],
+        "invalid_files": [],
+        "latest_conclusion": null,
+        "latest_run_at": null,
+        "latest_run_id": null,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 0,
+        "stale": false,
+        "status": "NO_CI",
+        "tests_configured": false,
+        "workflow_count": 0
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 1,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [
+          {
+            "message": "1 production-like environment(s) lack reviewers, wait timers or branch restrictions",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 0,
+        "status": "WARNING",
+        "unprotected_production": 1
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "Security",
+          "message": "Secret scanning is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Push protection is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Environment",
+          "message": "1 production-like environment(s) lack reviewers, wait timers or branch restrictions",
+          "severity": "WARNING"
+        }
+      ],
+      "fork": false,
+      "name": "api",
+      "overall": "NO_CI",
+      "primary_language": "Python",
+      "reasons": [
+        "no CI/CD workflows"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "not_enabled",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "partial",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "disabled",
+          "push_protection": "disabled",
+          "secret_scanning": "disabled"
+        },
+        "findings": [
+          {
+            "message": "Secret scanning is disabled",
+            "severity": "WARNING"
+          },
+          {
+            "message": "Push protection is disabled",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts not enabled or unsupported"
+        ],
+        "status": "WARNING",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": "https://github.com/Go-Satish-Labs/api",
+      "visibility": "public"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
+        "scope": "repository",
+        "status": "COMPLIANT"
+      },
+      "ci": {
+        "active_workflows": 0,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [],
+        "invalid_files": [],
+        "latest_conclusion": null,
+        "latest_run_at": null,
+        "latest_run_id": null,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 0,
+        "stale": false,
+        "status": "NO_CI",
+        "tests_configured": false,
+        "workflow_count": 0
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 1,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 1,
+        "repository_secret_count": 0,
+        "status": "CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "Security",
+          "message": "Secret scanning is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Push protection is disabled",
+          "severity": "WARNING"
+        }
+      ],
+      "fork": false,
+      "name": "Book_Reader",
+      "overall": "NO_CI",
+      "primary_language": "JavaScript",
+      "reasons": [
+        "no CI/CD workflows"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "not_enabled",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "partial",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "disabled",
+          "push_protection": "disabled",
+          "secret_scanning": "disabled"
+        },
+        "findings": [
+          {
+            "message": "Secret scanning is disabled",
+            "severity": "WARNING"
+          },
+          {
+            "message": "Push protection is disabled",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts not enabled or unsupported"
+        ],
+        "status": "WARNING",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": "https://github.com/Go-Satish-Labs/Book_Reader",
+      "visibility": "public"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
+        "scope": "repository",
+        "status": "COMPLIANT"
+      },
+      "ci": {
+        "active_workflows": 0,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [],
+        "invalid_files": [],
+        "latest_conclusion": null,
+        "latest_run_at": null,
+        "latest_run_id": null,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 0,
+        "stale": false,
+        "status": "NO_CI",
+        "tests_configured": false,
+        "workflow_count": 0
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 0,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 0,
+        "status": "NOT_CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "Security",
+          "message": "Secret scanning is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Push protection is disabled",
+          "severity": "WARNING"
+        }
+      ],
+      "fork": false,
+      "name": "Central-Communication",
+      "overall": "NO_CI",
+      "primary_language": "Python",
+      "reasons": [
+        "no CI/CD workflows"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "not_enabled",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "partial",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "disabled",
+          "push_protection": "disabled",
+          "secret_scanning": "disabled"
+        },
+        "findings": [
+          {
+            "message": "Secret scanning is disabled",
+            "severity": "WARNING"
+          },
+          {
+            "message": "Push protection is disabled",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts not enabled or unsupported"
+        ],
+        "status": "WARNING",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": "https://github.com/Go-Satish-Labs/Central-Communication",
+      "visibility": "public"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "skip",
+        "existing_ruleset_count": 0,
+        "reason": "excluded or write-protected by configuration",
+        "scope": "repository",
+        "status": "EXCLUDED"
+      },
+      "ci": {
+        "active_workflows": 9,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [
+          {
+            "message": "latest run is still in progress",
+            "severity": "WARNING"
+          },
+          {
+            "message": "no automated test step detected",
+            "severity": "WARNING"
+          }
+        ],
+        "invalid_files": [],
+        "latest_conclusion": "in_progress",
+        "latest_run_at": "2026-11-10T19:42:46Z",
+        "latest_run_id": 42887997116,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/42887997116",
+        "recent_cancellations": 0,
+        "recent_failures": 1,
+        "recent_runs": 20,
+        "stale": false,
+        "status": "WARNING",
+        "tests_configured": false,
+        "workflow_count": 7
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 1,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 2,
+        "status": "CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "CI/CD",
+          "message": "latest run is still in progress",
+          "severity": "WARNING"
+        },
+        {
+          "area": "CI/CD",
+          "message": "no automated test step detected",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Secret scanning is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Push protection is disabled",
+          "severity": "WARNING"
+        }
+      ],
+      "fork": false,
+      "name": "Devops-Control-Centre",
+      "overall": "WARNING",
+      "primary_language": "Python",
+      "reasons": [
+        "CI/CD warnings",
+        "security warnings"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "not_enabled",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "partial",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "disabled",
+          "push_protection": "disabled",
+          "secret_scanning": "disabled"
+        },
+        "findings": [
+          {
+            "message": "Secret scanning is disabled",
+            "severity": "WARNING"
+          },
+          {
+            "message": "Push protection is disabled",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts not enabled or unsupported"
+        ],
+        "status": "WARNING",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre",
+      "visibility": "public"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
+        "scope": "repository",
+        "status": "COMPLIANT"
+      },
+      "ci": {
+        "active_workflows": 0,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [],
+        "invalid_files": [],
+        "latest_conclusion": null,
+        "latest_run_at": null,
+        "latest_run_id": null,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 0,
+        "stale": false,
+        "status": "NO_CI",
+        "tests_configured": false,
+        "workflow_count": 0
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 1,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 1,
+        "repository_secret_count": 0,
+        "status": "CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "Security",
+          "message": "Secret scanning is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Push protection is disabled",
+          "severity": "WARNING"
+        }
+      ],
+      "fork": false,
+      "name": "Discover",
+      "overall": "NO_CI",
+      "primary_language": "HTML",
+      "reasons": [
+        "no CI/CD workflows"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "not_enabled",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "partial",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "disabled",
+          "push_protection": "disabled",
+          "secret_scanning": "disabled"
+        },
+        "findings": [
+          {
+            "message": "Secret scanning is disabled",
+            "severity": "WARNING"
+          },
+          {
+            "message": "Push protection is disabled",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts not enabled or unsupported"
+        ],
+        "status": "WARNING",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": "https://github.com/Go-Satish-Labs/Discover",
+      "visibility": "public"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
+        "scope": "repository",
+        "status": "COMPLIANT"
+      },
+      "ci": {
+        "active_workflows": 0,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [],
+        "invalid_files": [],
+        "latest_conclusion": null,
+        "latest_run_at": null,
+        "latest_run_id": null,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 0,
+        "stale": false,
+        "status": "NO_CI",
+        "tests_configured": false,
+        "workflow_count": 0
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 0,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 0,
+        "status": "NOT_CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "Security",
+          "message": "Secret scanning is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Push protection is disabled",
+          "severity": "WARNING"
+        }
+      ],
+      "fork": false,
+      "name": "Libris",
+      "overall": "NO_CI",
+      "primary_language": "TypeScript",
+      "reasons": [
+        "no CI/CD workflows"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "not_enabled",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "partial",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "disabled",
+          "push_protection": "disabled",
+          "secret_scanning": "disabled"
+        },
+        "findings": [
+          {
+            "message": "Secret scanning is disabled",
+            "severity": "WARNING"
+          },
+          {
+            "message": "Push protection is disabled",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts not enabled or unsupported"
+        ],
+        "status": "WARNING",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": "https://github.com/Go-Satish-Labs/Libris",
+      "visibility": "public"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 0,
+        "reason": "rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+        "scope": "repository",
+        "status": "UNKNOWN"
+      },
+      "ci": {
+        "active_workflows": 0,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [],
+        "invalid_files": [],
+        "latest_conclusion": null,
+        "latest_run_at": null,
+        "latest_run_id": null,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 0,
+        "stale": false,
+        "status": "NO_CI",
+        "tests_configured": false,
+        "workflow_count": 0
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 0,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 0,
+        "status": "NOT_CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "Branch protection",
+          "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+          "severity": "UNKNOWN"
+        }
+      ],
+      "fork": false,
+      "name": "private-455b6861",
+      "overall": "NO_CI",
+      "primary_language": "HTML",
+      "reasons": [
+        "no CI/CD workflows"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "unknown",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "unknown",
+          "push_protection": "unknown",
+          "secret_scanning": "unknown"
+        },
+        "findings": [],
+        "limitations": [
+          "security_and_analysis not visible to the token",
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts inaccessible"
+        ],
+        "status": "UNKNOWN",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": null,
+      "visibility": "private"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 0,
+        "reason": "rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+        "scope": "repository",
+        "status": "UNKNOWN"
+      },
+      "ci": {
+        "active_workflows": 1,
+        "build_configured": true,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [
+          {
+            "message": "no automated test step detected",
+            "severity": "WARNING"
+          }
+        ],
+        "invalid_files": [],
+        "latest_conclusion": "success",
+        "latest_run_at": "2026-10-08T10:14:23Z",
+        "latest_run_id": 37762152208,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 1,
+        "recent_runs": 9,
+        "stale": false,
+        "status": "WARNING",
+        "tests_configured": false,
+        "workflow_count": 1
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 0,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 8,
+        "status": "NOT_CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "CI/CD",
+          "message": "no automated test step detected",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "1 third-party action reference(s) not pinned to a commit SHA",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Branch protection",
+          "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+          "severity": "UNKNOWN"
+        }
+      ],
+      "fork": false,
+      "name": "private-aa818c64",
+      "overall": "UNKNOWN",
+      "primary_language": "TypeScript",
+      "reasons": [
+        "incomplete data for branch protection"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "unknown",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "unknown",
+          "push_protection": "unknown",
+          "secret_scanning": "unknown"
+        },
+        "findings": [
+          {
+            "message": "1 third-party action reference(s) not pinned to a commit SHA",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [
+          "security_and_analysis not visible to the token",
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts inaccessible"
+        ],
+        "status": "WARNING",
+        "third_party_actions": {
+          "total": 1,
+          "unpinned": 1
+        }
+      },
+      "url": null,
+      "visibility": "private"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 0,
+        "reason": "rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+        "scope": "repository",
+        "status": "UNKNOWN"
+      },
+      "ci": {
+        "active_workflows": 1,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [
+          {
+            "message": "no automated test step detected",
+            "severity": "WARNING"
+          }
+        ],
+        "invalid_files": [],
+        "latest_conclusion": "success",
+        "latest_run_at": "2026-11-10T18:39:58Z",
+        "latest_run_id": 42877489888,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 20,
+        "stale": false,
+        "status": "WARNING",
+        "tests_configured": false,
+        "workflow_count": 1
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 0,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 0,
+        "status": "NOT_CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "CI/CD",
+          "message": "no automated test step detected",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Branch protection",
+          "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+          "severity": "UNKNOWN"
+        }
+      ],
+      "fork": false,
+      "name": "private-caac64ed",
+      "overall": "UNKNOWN",
+      "primary_language": null,
+      "reasons": [
+        "incomplete data for security, branch protection"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "unknown",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "unknown",
+          "push_protection": "unknown",
+          "secret_scanning": "unknown"
+        },
+        "findings": [],
+        "limitations": [
+          "security_and_analysis not visible to the token",
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts inaccessible"
+        ],
+        "status": "UNKNOWN",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": null,
+      "visibility": "private"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 0,
+        "reason": "rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+        "scope": "repository",
+        "status": "UNKNOWN"
+      },
+      "ci": {
+        "active_workflows": 0,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [],
+        "invalid_files": [],
+        "latest_conclusion": null,
+        "latest_run_at": null,
+        "latest_run_id": null,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 0,
+        "stale": false,
+        "status": "NO_CI",
+        "tests_configured": false,
+        "workflow_count": 0
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 0,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 0,
+        "status": "NOT_CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "Branch protection",
+          "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+          "severity": "UNKNOWN"
+        }
+      ],
+      "fork": false,
+      "name": "private-fd484fa5",
+      "overall": "NO_CI",
+      "primary_language": null,
+      "reasons": [
+        "no CI/CD workflows"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "unknown",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "unknown",
+          "push_protection": "unknown",
+          "secret_scanning": "unknown"
+        },
+        "findings": [],
+        "limitations": [
+          "security_and_analysis not visible to the token",
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts inaccessible"
+        ],
+        "status": "UNKNOWN",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": null,
+      "visibility": "private"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 0,
+        "reason": "rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+        "scope": "repository",
+        "status": "UNKNOWN"
+      },
+      "ci": {
+        "active_workflows": 0,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [],
+        "invalid_files": [],
+        "latest_conclusion": null,
+        "latest_run_at": null,
+        "latest_run_id": null,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 0,
+        "stale": false,
+        "status": "NO_CI",
+        "tests_configured": false,
+        "workflow_count": 0
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 0,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 0,
+        "status": "NOT_CONFIGURED",
+        "unprotected_production": 0
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "Branch protection",
+          "message": "branch protection unknown: rulesets permission: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+          "severity": "UNKNOWN"
+        }
+      ],
+      "fork": false,
+      "name": "private-fd903b1f",
+      "overall": "NO_CI",
+      "primary_language": null,
+      "reasons": [
+        "no CI/CD workflows"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "unknown",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "unknown",
+          "push_protection": "unknown",
+          "secret_scanning": "unknown"
+        },
+        "findings": [],
+        "limitations": [
+          "security_and_analysis not visible to the token",
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts inaccessible"
+        ],
+        "status": "UNKNOWN",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": null,
+      "visibility": "private"
+    },
+    {
+      "archived": false,
+      "branch": {
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
+        "scope": "repository",
+        "status": "COMPLIANT"
+      },
+      "ci": {
+        "active_workflows": 0,
+        "build_configured": false,
+        "consecutive_failures": 0,
+        "deploy_configured": false,
+        "error": null,
+        "failed_jobs": [],
+        "findings": [],
+        "invalid_files": [],
+        "latest_conclusion": null,
+        "latest_run_at": null,
+        "latest_run_id": null,
+        "latest_run_url": null,
+        "recent_cancellations": 0,
+        "recent_failures": 0,
+        "recent_runs": 0,
+        "stale": false,
+        "status": "NO_CI",
+        "tests_configured": false,
+        "workflow_count": 0
+      },
+      "default_branch": "main",
+      "environment": {
+        "availability": "available",
+        "environment_count": 4,
+        "environment_secret_count": 0,
+        "error": null,
+        "findings": [
+          {
+            "message": "3 production-like environment(s) lack reviewers, wait timers or branch restrictions",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [],
+        "protected_environments": 0,
+        "repository_secret_count": 0,
+        "status": "WARNING",
+        "unprotected_production": 3
+      },
+      "errors": [],
+      "findings": [
+        {
+          "area": "Security",
+          "message": "Secret scanning is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Security",
+          "message": "Push protection is disabled",
+          "severity": "WARNING"
+        },
+        {
+          "area": "Environment",
+          "message": "3 production-like environment(s) lack reviewers, wait timers or branch restrictions",
+          "severity": "WARNING"
+        }
+      ],
+      "fork": false,
+      "name": "web",
+      "overall": "NO_CI",
+      "primary_language": "TypeScript",
+      "reasons": [
+        "no CI/CD workflows"
+      ],
+      "security": {
+        "actions": {
+          "can_approve_pull_request_reviews": true,
+          "default_workflow_permissions": "read"
+        },
+        "code_scanning": {
+          "availability": "not_enabled",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "coverage": "partial",
+        "dependabot": {
+          "availability": "inaccessible",
+          "critical_or_high": 0,
+          "open": null
+        },
+        "features": {
+          "dependabot_security_updates": "disabled",
+          "push_protection": "disabled",
+          "secret_scanning": "disabled"
+        },
+        "findings": [
+          {
+            "message": "Secret scanning is disabled",
+            "severity": "WARNING"
+          },
+          {
+            "message": "Push protection is disabled",
+            "severity": "WARNING"
+          }
+        ],
+        "limitations": [
+          "Dependabot alerts inaccessible",
+          "Code scanning alerts not enabled or unsupported"
+        ],
+        "status": "WARNING",
+        "third_party_actions": {
+          "total": 0,
+          "unpinned": 0
+        }
+      },
+      "url": "https://github.com/Go-Satish-Labs/web",
+      "visibility": "public"
+    }
+  ],
+  "schema_version": 1,
+  "security_statistics": {
+    "coverage_percent": 0.0,
+    "covered": 0,
+    "critical": 0,
+    "open_code_scanning_alerts": 0,
+    "open_dependabot_alerts": 0,
+    "warning": 9
+  }
+}
