@@ -1,7 +1,7 @@
 name: Report Generation
 
-# Runs only after a successful Organization Audit. Validates the artifacts, copies them
-# into the repository and commits them when their content changed.
+# Runs after a successful Organization Audit. Publishes the reports on a new branch,
+# opens a pull request, and enables auto-merge so it merges once the rules are satisfied.
 on:
   workflow_run:
     workflows: ["Organization Audit"]
@@ -9,8 +9,8 @@ on:
 
 permissions:
   contents: write
-  actions: read
   pull-requests: write
+  actions: read
 
 concurrency:
   group: dcc-publish
@@ -18,23 +18,16 @@ concurrency:
 
 jobs:
   publish:
-    name: Validate and publish reports
+    name: Validate, publish and open pull request
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      RUN_ID: ${{ github.event.workflow_run.id }}
     steps:
-      - name: Create GitHub App installation token
-        id: app-token
-        continue-on-error: true
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.DCC_APP_ID }}
-          private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
-          owner: Go-Satish-Labs
-
       - uses: actions/checkout@v4
-        with:
-          token: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || github.token }}
 
       - uses: actions/setup-python@v5
         with:
@@ -58,24 +51,31 @@ jobs:
       - name: Publish artifacts
         run: python -m src.cli publish --source build --target .
 
-      - name: Commit changed artifacts
-        env:
-          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || github.token }}
+      - name: Create branch, commit and open pull request
         run: |
+          set -euo pipefail
           git config user.name "devops-control-center[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Unique per run, so a push can never collide with an earlier branch.
+          BRANCH="automation/report-update-${RUN_ID}-$(date -u +%Y%m%d-%H%M%S)"
+
           git add assets reports
           if git diff --cached --quiet; then
-            echo "No report changes to commit."
+            echo "No report changes to publish."
             exit 0
           fi
-          git commit -m "chore(reports): update organization health"
-          BRANCH="automation/report-update-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          git switch -c "$BRANCH"
-          git push --set-upstream origin "$BRANCH"
-          gh pr create \
+
+          git checkout -b "$BRANCH"
+          git commit -m "chore(reports): update organization health [skip ci]"
+          git push origin "HEAD:refs/heads/$BRANCH"
+
+          pr_url=$(gh pr create \
             --base "$DEFAULT_BRANCH" \
             --head "$BRANCH" \
-            --title "chore(reports): update organization health" \
-            --body "Automated report update from the successful Organization Audit workflow run ${GITHUB_RUN_ID}."
+            --title "Update organization health reports" \
+            --body "Automated report update from Organization Audit run ${RUN_ID}.")
+          echo "Opened $pr_url"
+
+          gh pr merge "$BRANCH" --auto --squash --delete-branch \
+            || echo "::warning::Auto-merge could not be enabled. Merge $pr_url manually, or enable 'Allow auto-merge'."
