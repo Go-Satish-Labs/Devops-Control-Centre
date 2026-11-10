@@ -29,6 +29,7 @@ from src.rulesets.engine import run_rulesets
 from src.utils.config import VALID_MODES, ConfigError, Settings, load_settings
 from src.utils.log import configure_logging, get_logger
 from src.utils.summary import write_step_summary
+from src.utils.text import md_escape
 
 log = get_logger("dcc.cli")
 ENFORCE_CONFIRMATION = "ENFORCE"
@@ -94,13 +95,29 @@ def cmd_rulesets(args, settings: Settings) -> int:
     report = run_rulesets(client, settings, discovery.repositories, args.mode)
     out = Path(args.output)
     _write(out / "rulesets-report.json", json.dumps(report, indent=2, sort_keys=True) + "\n")
+
     s = report["summary"]
-    write_step_summary("\n".join([
-        f"## Branch rulesets ({args.mode})", "",
+    lines = [
+        f"## Branch rulesets ({args.mode})",
+        "",
+        f"- Repositories visible to the token: {discovery.total_seen}",
+        f"- Excluded by configuration: {len(discovery.excluded)}",
         f"- Evaluated: {s['evaluated']}, compliant: {s['compliant']}, non-compliant: {s['non_compliant']}",
         f"- Would create: {s['would_create']}, created: {s['created']}, errors: {s['errors']}",
-        f"- Scope: {report['scope']['effective']}",
-    ]))
+        f"- Scope: {report['scope']['effective']} ({'; '.join(report['scope']['notes']) or 'no notes'})",
+        "",
+        "| Repository | Status | Action | Reason |",
+        "|---|---|---|---|",
+    ]
+    for plan in report["repositories"]:
+        lines.append(f"| {md_escape(plan['repository'])} | {plan['status']} | {plan['action']} | "
+                     f"{md_escape(plan['reason'])} |")
+        log.info("ruleset repo=%s status=%s action=%s reason=%s",
+                 plan["repository"], plan["status"], plan["action"], plan["reason"])
+    for repo, reason in discovery.excluded:
+        name = public_identifier(repo, settings.redact_private_repositories)
+        lines.append(f"| {md_escape(name)} | EXCLUDED | skip | {md_escape(reason)} |")
+    write_step_summary("\n".join(lines))
     return 1 if s["errors"] else 0
 
 
