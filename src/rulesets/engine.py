@@ -142,7 +142,8 @@ def prepare_organization_scope(client, org: str, settings: Settings, mode: str) 
         scope.update(effective="organization", covers_all=True)
         scope["notes"].append("organization ruleset created")
     except GitHubAPIError as exc:
-        scope["notes"].append(f"organization ruleset creation failed ({exc.kind}); using repository-level rulesets")
+        scope["notes"].append(
+            f"organization ruleset creation failed ({exc.kind}): {exc.message}; using repository-level rulesets")
     return scope
 
 
@@ -165,7 +166,7 @@ def evaluate_repository(client, org: str, repo: RepositoryInfo, settings: Settin
     try:
         listing = list(client.paginate(f"/repos/{org}/{repo.name}/rulesets"))
     except GitHubAPIError as exc:
-        return _result(UNKNOWN, "none", f"rulesets {exc.kind}")
+        return _result(UNKNOWN, "none", f"rulesets {exc.kind}: {exc.message}")
 
     name = ruleset_name(settings)
     named = covered = unreadable = False
@@ -199,7 +200,7 @@ def evaluate_repository(client, org: str, repo: RepositoryInfo, settings: Settin
     try:
         client.post_json(f"/repos/{org}/{repo.name}/rulesets", payload)
     except GitHubAPIError as exc:
-        return _result(NON_COMPLIANT, "error", f"ruleset creation failed ({exc.kind})",
+        return _result(NON_COMPLIANT, "error", f"ruleset creation failed ({exc.kind}): {exc.message}",
                        status_checks=checks, existing=existing_names)
     return _result(COMPLIANT, "created", "ruleset created", status_checks=checks, existing=existing_names)
 
@@ -213,7 +214,7 @@ def run_rulesets(client, settings: Settings, repositories: list[RepositoryInfo],
         try:
             outcome = evaluate_repository(client, settings.organization, repo, settings, scope, mode)
         except GitHubAPIError as exc:
-            outcome = _result(UNKNOWN, "none", f"audit error ({exc.kind})")
+            outcome = _result(UNKNOWN, "none", f"audit error ({exc.kind}): {exc.message}")
         plans.append({"repository": public_identifier(repo, settings.redact_private_repositories), **outcome})
     actions = Counter(p["action"] for p in plans)
     summary = {
