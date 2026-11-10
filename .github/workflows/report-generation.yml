@@ -1,31 +1,24 @@
-name: Report Generation
+name: Repository Discovery
 
-# Runs after a successful Organization Audit. Publishes the reports on a new branch,
-# opens a pull request, and enables auto-merge so it merges once the rules are satisfied.
 on:
-  workflow_run:
-    workflows: ["Organization Audit"]
-    types: [completed]
+  schedule:
+    - cron: "5 1 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [repository-created]
 
 permissions:
-  contents: write
-  pull-requests: write
-  actions: read
+  contents: read
 
 concurrency:
-  group: dcc-publish
+  group: dcc-discovery
   cancel-in-progress: false
 
 jobs:
-  publish:
-    name: Validate, publish and open pull request
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  discover:
+    name: Discover repositories
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      GH_TOKEN: ${{ github.token }}
-      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-      RUN_ID: ${{ github.event.workflow_run.id }}
     steps:
       - uses: actions/checkout@v4
 
@@ -37,45 +30,27 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Download audit output
-        uses: actions/download-artifact@v4
+      - name: Create GitHub App installation token
+        id: app-token
+        continue-on-error: true
+        uses: actions/create-github-app-token@v1
         with:
-          name: dcc-audit-output
-          path: build
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ github.token }}
+          app-id: ${{ secrets.DCC_APP_ID }}
+          private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
+          owner: Go-Satish-Labs
 
-      - name: Validate artifacts
-        run: python -m src.cli validate --source build
+      - name: Discover repositories
+        env:
+          DCC_TOKEN: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || '' }}
+          DCC_AUTH_MODE: ${{ steps.app-token.outputs.token != '' && 'github-app' || (secrets.DCC_PAT != '' && 'personal-access-token') || 'github-token-limited' }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -m src.cli discover --output build
 
-      - name: Publish artifacts
-        run: python -m src.cli publish --source build --target .
-
-      - name: Create branch, commit and open pull request
-        run: |
-          set -euo pipefail
-          git config user.name "devops-control-center[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # Unique per run, so a push can never collide with an earlier branch.
-          BRANCH="automation/report-update-${RUN_ID}-$(date -u +%Y%m%d-%H%M%S)"
-
-          git add assets reports
-          if git diff --cached --quiet; then
-            echo "No report changes to publish."
-            exit 0
-          fi
-
-          git checkout -b "$BRANCH"
-          git commit -m "chore(reports): update organization health [skip ci]"
-          git push origin "HEAD:refs/heads/$BRANCH"
-
-          pr_url=$(gh pr create \
-            --base "$DEFAULT_BRANCH" \
-            --head "$BRANCH" \
-            --title "Update organization health reports" \
-            --body "Automated report update from Organization Audit run ${RUN_ID}.")
-          echo "Opened $pr_url"
-
-          gh pr merge "$BRANCH" --auto --squash --delete-branch \
-            || echo "::warning::Auto-merge could not be enabled. Merge $pr_url manually, or enable 'Allow auto-merge'."
+      - name: Upload discovery output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dcc-discovery-output
+          path: build/
+          retention-days: 14
+          if-no-files-found: ignore
