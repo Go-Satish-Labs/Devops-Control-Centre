@@ -52,37 +52,25 @@ jobs:
           private-key: ${{ secrets.DCC_APP_PRIVATE_KEY }}
           owner: Go-Satish-Labs
 
-      - name: Remove branch rulesets from the control repository
+      - name: Check for a ruleset on the control repository
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'enforce' && inputs.confirm == 'ENFORCE' }}
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || github.token }}
         run: |
-          set -euo pipefail
-          echo "Removing '$RULESET_NAME' from $ORG/$CONTROL_REPO"
-
-          # Repository-level ruleset on the control repository (exact name match only)
-          for id in $(gh api "repos/$ORG/$CONTROL_REPO/rulesets" \
-              --jq ".[] | select(.name == \"$RULESET_NAME\") | .id"); do
+          set -uo pipefail
+          echo "Checking '$RULESET_NAME' on $ORG/$CONTROL_REPO"
+          ids=$(gh api "repos/$ORG/$CONTROL_REPO/rulesets" \
+              --jq ".[] | select(.name == \"$RULESET_NAME\") | .id" 2>/tmp/err) || {
+            echo "Skipped: $(cat /tmp/err)"
+            echo "If a ruleset exists, delete it by hand in Settings > Rules > Rulesets."
+            exit 0
+          }
+          for id in $ids; do
             echo "Deleting repository ruleset $id"
             gh api -X DELETE "repos/$ORG/$CONTROL_REPO/rulesets/$id"
           done
-
-          # Organization-level ruleset: keep it, but exclude the control repository
-          for id in $(gh api "orgs/$ORG/rulesets" \
-              --jq ".[] | select(.name == \"$RULESET_NAME\") | .id"); do
-            gh api "orgs/$ORG/rulesets/$id" > current.json
-            jq --arg repo "$CONTROL_REPO" '
-              {name, target, enforcement, conditions, rules, bypass_actors}
-              | if .conditions.repository_name then
-                  .conditions.repository_name.exclude =
-                    (((.conditions.repository_name.exclude // []) + [$repo]) | unique)
-                else . end
-            ' current.json > update.json
-            echo "Excluding $CONTROL_REPO from organization ruleset $id"
-            gh api -X PUT "orgs/$ORG/rulesets/$id" --input update.json
-          done
-
-          echo "Control repository is clear of enforced rulesets."
+          echo "Control repository check complete."
 
       - name: Evaluate and create rulesets
         env:
