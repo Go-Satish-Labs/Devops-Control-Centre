@@ -9,38 +9,38 @@
       "repositories": 7
     },
     {
-      "message": "Code scanning alerts inaccessible",
+      "message": "security_and_analysis not visible to the token",
       "repositories": 5
     },
     {
-      "message": "security_and_analysis not visible to the token",
+      "message": "Code scanning alerts inaccessible",
       "repositories": 5
     }
   ],
   "audit": {
-    "api_requests": 132,
+    "api_requests": 131,
     "auth_mode": "github-app",
     "completeness_percent": 81.2,
-    "duration_seconds": 21.5,
+    "duration_seconds": 29.4,
     "mode": "audit-only",
-    "run_id": "42473680337",
+    "run_id": "42767163319",
     "status": "PARTIAL",
-    "timestamp": "2026-11-08T10:58:51+00:00"
+    "timestamp": "2026-11-10T06:14:33+00:00"
   },
   "branch_protection": {
-    "compliance_percent": 0.0,
-    "compliant": 0,
+    "compliance_percent": 83.3,
+    "compliant": 5,
     "evaluated": 6,
-    "non_compliant": 6,
+    "non_compliant": 1,
     "scope": "repository",
     "scope_notes": [
       "organization rulesets permission; using repository-level rulesets"
     ]
   },
   "ci_statistics": {
-    "evaluated": 3,
+    "evaluated": 4,
     "latest_failed": 0,
-    "latest_success": 3,
+    "latest_success": 4,
     "repeated_failures": 0,
     "success_percent": 100.0
   },
@@ -49,7 +49,7 @@
     "checks_total": 48,
     "percent": 81.2
   },
-  "control_repository": "DevOps-Control-Center",
+  "control_repository": "DevOps-Control-Centre",
   "discovery": {
     "archived": 0,
     "audited": 12,
@@ -61,9 +61,9 @@
     "without_ci": 8
   },
   "environment_statistics": {
-    "configured": 2,
+    "configured": 3,
     "coverage_percent": 100.0,
-    "not_configured": 8,
+    "not_configured": 7,
     "organization_secrets": {
       "availability": "available",
       "secret_count": 0
@@ -134,12 +134,6 @@
       "severity": "WARNING"
     },
     {
-      "area": "Branch protection",
-      "message": "default branch not protected: no covering ruleset found",
-      "repository": "api",
-      "severity": "WARNING"
-    },
-    {
       "area": "Environment",
       "message": "1 production-like environment(s) lack reviewers, wait timers or branch restrictions",
       "repository": "api",
@@ -158,12 +152,6 @@
       "severity": "WARNING"
     },
     {
-      "area": "Branch protection",
-      "message": "default branch not protected: no covering ruleset found",
-      "repository": "Book_Reader",
-      "severity": "WARNING"
-    },
-    {
       "area": "Security",
       "message": "Secret scanning is disabled",
       "repository": "Book_Reader",
@@ -174,6 +162,18 @@
       "message": "Push protection is disabled",
       "repository": "Book_Reader",
       "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Secret scanning is disabled",
+      "repository": "Central-Communication",
+      "severity": "WARNING"
+    },
+    {
+      "area": "Security",
+      "message": "Push protection is disabled",
+      "repository": "Central-Communication",
+      "severity": "WARNING"
     }
   ],
   "recommendations": [
@@ -182,7 +182,7 @@
       "priority": "medium"
     },
     {
-      "message": "Run the branch ruleset workflow in dry-run mode, review the plan, then enforce it for 6 repository(ies).",
+      "message": "Run the branch ruleset workflow in dry-run mode, review the plan, then enforce it for 1 repository(ies).",
       "priority": "medium"
     },
     {
@@ -219,9 +219,9 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "success",
-        "latest_run_at": "2026-11-08T10:38:06Z",
-        "latest_run_id": 42472254366,
-        "latest_run_url": "https://github.com/Go-Satish-Labs/.github/actions/runs/42472254366",
+        "latest_run_at": "2026-11-09T11:54:50Z",
+        "latest_run_id": 42612735685,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/.github/actions/runs/42612735685",
         "recent_cancellations": 0,
         "recent_failures": 0,
         "recent_runs": 20,
@@ -271,7 +271,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -316,11 +316,11 @@
     {
       "archived": false,
       "branch": {
-        "action": "would_create",
-        "existing_ruleset_count": 0,
-        "reason": "no covering ruleset found",
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
         "scope": "repository",
-        "status": "NON_COMPLIANT"
+        "status": "COMPLIANT"
       },
       "ci": {
         "active_workflows": 0,
@@ -377,11 +377,6 @@
           "area": "Environment",
           "message": "1 production-like environment(s) lack reviewers, wait timers or branch restrictions",
           "severity": "WARNING"
-        },
-        {
-          "area": "Branch protection",
-          "message": "default branch not protected: no covering ruleset found",
-          "severity": "WARNING"
         }
       ],
       "fork": false,
@@ -393,7 +388,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -438,11 +433,11 @@
     {
       "archived": false,
       "branch": {
-        "action": "would_create",
-        "existing_ruleset_count": 0,
-        "reason": "no covering ruleset found",
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
         "scope": "repository",
-        "status": "NON_COMPLIANT"
+        "status": "COMPLIANT"
       },
       "ci": {
         "active_workflows": 0,
@@ -489,11 +484,6 @@
           "area": "Security",
           "message": "Push protection is disabled",
           "severity": "WARNING"
-        },
-        {
-          "area": "Branch protection",
-          "message": "default branch not protected: no covering ruleset found",
-          "severity": "WARNING"
         }
       ],
       "fork": false,
@@ -505,7 +495,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -550,11 +540,11 @@
     {
       "archived": false,
       "branch": {
-        "action": "would_create",
-        "existing_ruleset_count": 0,
-        "reason": "no covering ruleset found",
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
         "scope": "repository",
-        "status": "NON_COMPLIANT"
+        "status": "COMPLIANT"
       },
       "ci": {
         "active_workflows": 0,
@@ -601,11 +591,6 @@
           "area": "Security",
           "message": "Push protection is disabled",
           "severity": "WARNING"
-        },
-        {
-          "area": "Branch protection",
-          "message": "default branch not protected: no covering ruleset found",
-          "severity": "WARNING"
         }
       ],
       "fork": false,
@@ -617,7 +602,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -669,7 +654,7 @@
         "status": "NON_COMPLIANT"
       },
       "ci": {
-        "active_workflows": 4,
+        "active_workflows": 9,
         "build_configured": false,
         "consecutive_failures": 0,
         "deploy_configured": false,
@@ -677,47 +662,38 @@
         "failed_jobs": [],
         "findings": [
           {
-            "message": "latest run is still in progress",
-            "severity": "WARNING"
-          },
-          {
             "message": "no automated test step detected",
             "severity": "WARNING"
           }
         ],
         "invalid_files": [],
-        "latest_conclusion": "in_progress",
-        "latest_run_at": "2026-11-08T10:58:40Z",
-        "latest_run_id": 42473680337,
-        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/42473680337",
+        "latest_conclusion": "success",
+        "latest_run_at": "2026-11-10T06:14:28Z",
+        "latest_run_id": 42767175286,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/42767175286",
         "recent_cancellations": 0,
-        "recent_failures": 6,
-        "recent_runs": 8,
+        "recent_failures": 4,
+        "recent_runs": 20,
         "stale": false,
         "status": "WARNING",
         "tests_configured": false,
-        "workflow_count": 4
+        "workflow_count": 7
       },
       "default_branch": "main",
       "environment": {
         "availability": "available",
-        "environment_count": 0,
+        "environment_count": 1,
         "environment_secret_count": 0,
         "error": null,
         "findings": [],
         "limitations": [],
         "protected_environments": 0,
         "repository_secret_count": 2,
-        "status": "NOT_CONFIGURED",
+        "status": "CONFIGURED",
         "unprotected_production": 0
       },
       "errors": [],
       "findings": [
-        {
-          "area": "CI/CD",
-          "message": "latest run is still in progress",
-          "severity": "WARNING"
-        },
         {
           "area": "CI/CD",
           "message": "no automated test step detected",
@@ -750,7 +726,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -795,11 +771,11 @@
     {
       "archived": false,
       "branch": {
-        "action": "would_create",
-        "existing_ruleset_count": 0,
-        "reason": "no covering ruleset found",
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
         "scope": "repository",
-        "status": "NON_COMPLIANT"
+        "status": "COMPLIANT"
       },
       "ci": {
         "active_workflows": 0,
@@ -846,11 +822,6 @@
           "area": "Security",
           "message": "Push protection is disabled",
           "severity": "WARNING"
-        },
-        {
-          "area": "Branch protection",
-          "message": "default branch not protected: no covering ruleset found",
-          "severity": "WARNING"
         }
       ],
       "fork": false,
@@ -862,7 +833,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -964,7 +935,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -1073,7 +1044,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -1136,8 +1107,8 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "success",
-        "latest_run_at": "2026-11-08T07:58:27Z",
-        "latest_run_id": 42460931292,
+        "latest_run_at": "2026-11-10T03:08:04Z",
+        "latest_run_id": 42747417958,
         "latest_run_url": null,
         "recent_cancellations": 0,
         "recent_failures": 0,
@@ -1182,7 +1153,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -1276,7 +1247,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -1370,7 +1341,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
@@ -1407,11 +1378,11 @@
     {
       "archived": false,
       "branch": {
-        "action": "would_create",
-        "existing_ruleset_count": 0,
-        "reason": "no covering ruleset found",
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
         "scope": "repository",
-        "status": "NON_COMPLIANT"
+        "status": "COMPLIANT"
       },
       "ci": {
         "active_workflows": 0,
@@ -1468,11 +1439,6 @@
           "area": "Environment",
           "message": "3 production-like environment(s) lack reviewers, wait timers or branch restrictions",
           "severity": "WARNING"
-        },
-        {
-          "area": "Branch protection",
-          "message": "default branch not protected: no covering ruleset found",
-          "severity": "WARNING"
         }
       ],
       "fork": false,
@@ -1484,7 +1450,7 @@
       ],
       "security": {
         "actions": {
-          "can_approve_pull_request_reviews": false,
+          "can_approve_pull_request_reviews": true,
           "default_workflow_permissions": "read"
         },
         "code_scanning": {
