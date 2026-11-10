@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "dry-run (default), audit-only, or enforce (creates rulesets)"
+        description: "dry-run, audit-only, or enforce (creates missing rulesets)"
         type: choice
         options: [dry-run, audit-only, enforce]
         default: dry-run
@@ -29,7 +29,7 @@ env:
 
 jobs:
   rulesets:
-    name: Evaluate branch rulesets
+    name: Evaluate and create branch rulesets
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -53,7 +53,7 @@ jobs:
           owner: Go-Satish-Labs
 
       - name: Remove branch rulesets from the control repository
-        if: ${{ inputs.mode == 'enforce' && inputs.confirm == 'ENFORCE' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'enforce' && inputs.confirm == 'ENFORCE' }}
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || github.token }}
         run: |
@@ -84,13 +84,14 @@ jobs:
 
           echo "Control repository is clear of enforced rulesets."
 
-      - name: Evaluate rulesets
+      - name: Evaluate and create rulesets
         env:
           DCC_TOKEN: ${{ steps.app-token.outputs.token || secrets.DCC_PAT || '' }}
           DCC_AUTH_MODE: ${{ steps.app-token.outputs.token != '' && 'github-app' || (secrets.DCC_PAT != '' && 'personal-access-token') || 'github-token-limited' }}
           GITHUB_TOKEN: ${{ github.token }}
-          DCC_CONFIRM_ENFORCE: ${{ inputs.confirm }}
-          RULESET_MODE: ${{ github.event_name == 'schedule' && 'dry-run' || inputs.mode || 'dry-run' }}
+          # Scheduled runs create missing rulesets (create-only). Manual runs use the chosen mode.
+          RULESET_MODE: ${{ github.event_name == 'schedule' && 'enforce' || inputs.mode || 'dry-run' }}
+          DCC_CONFIRM_ENFORCE: ${{ github.event_name == 'schedule' && 'ENFORCE' || inputs.confirm }}
         run: python -m src.cli rulesets --mode "$RULESET_MODE" --output build
 
       - name: Upload rulesets report
