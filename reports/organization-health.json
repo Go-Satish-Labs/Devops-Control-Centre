@@ -9,11 +9,11 @@
       "repositories": 8
     },
     {
-      "message": "security_and_analysis not visible to the token",
+      "message": "Code scanning alerts inaccessible",
       "repositories": 5
     },
     {
-      "message": "Code scanning alerts inaccessible",
+      "message": "security_and_analysis not visible to the token",
       "repositories": 5
     }
   ],
@@ -21,11 +21,11 @@
     "api_requests": 137,
     "auth_mode": "github-app",
     "completeness_percent": 82.7,
-    "duration_seconds": 30.3,
+    "duration_seconds": 27.0,
     "mode": "audit-only",
-    "run_id": "44809664513",
+    "run_id": "44878454467",
     "status": "PARTIAL",
-    "timestamp": "2026-11-20T20:15:32+00:00"
+    "timestamp": "2026-11-21T07:03:51+00:00"
   },
   "branch_protection": {
     "compliance_percent": 100.0,
@@ -668,9 +668,9 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "in_progress",
-        "latest_run_at": "2026-11-20T20:15:17Z",
-        "latest_run_id": 44809664513,
-        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/44809664513",
+        "latest_run_at": "2026-11-21T07:03:42Z",
+        "latest_run_id": 44878454467,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/44878454467",
         "recent_cancellations": 0,
         "recent_failures": 0,
         "recent_runs": 20,
@@ -1213,8 +1213,8 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "success",
-        "latest_run_at": "2026-11-20T18:36:07Z",
-        "latest_run_id": 44794308742,
+        "latest_run_at": "2026-11-21T00:12:56Z",
+        "latest_run_id": 44842304849,
         "latest_run_url": null,
         "recent_cancellations": 0,
         "recent_failures": 0,
