@@ -9,11 +9,11 @@
       "repositories": 8
     },
     {
-      "message": "Code scanning alerts inaccessible",
+      "message": "security_and_analysis not visible to the token",
       "repositories": 5
     },
     {
-      "message": "security_and_analysis not visible to the token",
+      "message": "Code scanning alerts inaccessible",
       "repositories": 5
     }
   ],
@@ -21,11 +21,11 @@
     "api_requests": 137,
     "auth_mode": "github-app",
     "completeness_percent": 82.7,
-    "duration_seconds": 31.6,
+    "duration_seconds": 32.6,
     "mode": "audit-only",
-    "run_id": "45576864004",
+    "run_id": "45706384361",
     "status": "PARTIAL",
-    "timestamp": "2026-11-25T08:30:43+00:00"
+    "timestamp": "2026-11-25T21:40:10+00:00"
   },
   "branch_protection": {
     "compliance_percent": 100.0,
@@ -215,9 +215,9 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "success",
-        "latest_run_at": "2026-11-24T14:03:28Z",
-        "latest_run_id": 45409872184,
-        "latest_run_url": "https://github.com/Go-Satish-Labs/.github/actions/runs/45409872184",
+        "latest_run_at": "2026-11-25T13:16:38Z",
+        "latest_run_id": 45621928232,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/.github/actions/runs/45621928232",
         "recent_cancellations": 0,
         "recent_failures": 0,
         "recent_runs": 20,
@@ -668,9 +668,9 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "in_progress",
-        "latest_run_at": "2026-11-25T08:30:24Z",
-        "latest_run_id": 45576864004,
-        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/45576864004",
+        "latest_run_at": "2026-11-25T21:39:47Z",
+        "latest_run_id": 45706384361,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/45706384361",
         "recent_cancellations": 0,
         "recent_failures": 0,
         "recent_runs": 20,
@@ -1213,8 +1213,8 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "success",
-        "latest_run_at": "2026-11-25T01:37:52Z",
-        "latest_run_id": 45527154677,
+        "latest_run_at": "2026-11-25T20:06:40Z",
+        "latest_run_id": 45691755847,
         "latest_run_url": null,
         "recent_cancellations": 0,
         "recent_failures": 0,
