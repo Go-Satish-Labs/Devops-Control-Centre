@@ -9,29 +9,29 @@
       "repositories": 9
     },
     {
-      "message": "Code scanning alerts inaccessible",
+      "message": "security_and_analysis not visible to the token",
       "repositories": 5
     },
     {
-      "message": "security_and_analysis not visible to the token",
+      "message": "Code scanning alerts inaccessible",
       "repositories": 5
     }
   ],
   "audit": {
-    "api_requests": 147,
+    "api_requests": 146,
     "auth_mode": "github-app",
     "completeness_percent": 83.9,
-    "duration_seconds": 28.4,
+    "duration_seconds": 31.7,
     "mode": "audit-only",
-    "run_id": "45781501774",
+    "run_id": "45898450987",
     "status": "PARTIAL",
-    "timestamp": "2026-11-26T08:14:42+00:00"
+    "timestamp": "2026-11-26T21:29:20+00:00"
   },
   "branch_protection": {
-    "compliance_percent": 85.7,
-    "compliant": 6,
+    "compliance_percent": 100.0,
+    "compliant": 7,
     "evaluated": 7,
-    "non_compliant": 1,
+    "non_compliant": 0,
     "scope": "repository",
     "scope_notes": [
       "organization rulesets permission; using repository-level rulesets"
@@ -182,10 +182,6 @@
       "priority": "medium"
     },
     {
-      "message": "Run the branch ruleset workflow in dry-run mode, review the plan, then enforce it for 1 repository(ies).",
-      "priority": "medium"
-    },
-    {
       "message": "Add reviewers, wait timers or branch restrictions to 2 repository(ies) with unprotected production environments.",
       "priority": "medium"
     },
@@ -219,9 +215,9 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "success",
-        "latest_run_at": "2026-11-25T13:16:38Z",
-        "latest_run_id": 45621928232,
-        "latest_run_url": "https://github.com/Go-Satish-Labs/.github/actions/runs/45621928232",
+        "latest_run_at": "2026-11-26T12:57:40Z",
+        "latest_run_id": 45824522218,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/.github/actions/runs/45824522218",
         "recent_cancellations": 0,
         "recent_failures": 0,
         "recent_runs": 20,
@@ -672,9 +668,9 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "in_progress",
-        "latest_run_at": "2026-11-26T08:14:33Z",
-        "latest_run_id": 45781501774,
-        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/45781501774",
+        "latest_run_at": "2026-11-26T21:29:10Z",
+        "latest_run_id": 45898450987,
+        "latest_run_url": "https://github.com/Go-Satish-Labs/Devops-Control-Centre/actions/runs/45898450987",
         "recent_cancellations": 0,
         "recent_failures": 0,
         "recent_runs": 20,
@@ -1217,8 +1213,8 @@
         ],
         "invalid_files": [],
         "latest_conclusion": "success",
-        "latest_run_at": "2026-11-26T02:47:46Z",
-        "latest_run_id": 45744776494,
+        "latest_run_at": "2026-11-26T20:30:50Z",
+        "latest_run_id": 45891570778,
         "latest_run_url": null,
         "recent_cancellations": 0,
         "recent_failures": 0,
@@ -1488,11 +1484,11 @@
     {
       "archived": false,
       "branch": {
-        "action": "would_create",
-        "existing_ruleset_count": 0,
-        "reason": "no covering ruleset found",
+        "action": "none",
+        "existing_ruleset_count": 1,
+        "reason": "an active ruleset already covers the default branch",
         "scope": "repository",
-        "status": "NON_COMPLIANT"
+        "status": "COMPLIANT"
       },
       "ci": {
         "active_workflows": 0,
@@ -1538,11 +1534,6 @@
         {
           "area": "Security",
           "message": "Push protection is disabled",
-          "severity": "WARNING"
-        },
-        {
-          "area": "Branch protection",
-          "message": "default branch not protected: no covering ruleset found",
           "severity": "WARNING"
         }
       ],

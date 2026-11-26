@@ -11,5 +11,5 @@ private-aa818c64,private,no,no,main,TypeScript,UNKNOWN,WARNING,success,WARNING,u
 private-caac64ed,private,no,no,main,,UNKNOWN,WARNING,success,UNKNOWN,unknown,UNKNOWN,none,NOT_CONFIGURED,2,"incomplete data for security, branch protection"
 private-fd484fa5,private,no,no,main,,NO_CI,NO_CI,,UNKNOWN,unknown,UNKNOWN,none,NOT_CONFIGURED,1,no CI/CD workflows
 private-fd903b1f,private,no,no,main,,NO_CI,NO_CI,,UNKNOWN,unknown,UNKNOWN,none,NOT_CONFIGURED,1,no CI/CD workflows
-R4S-IO,public,no,no,main,,NO_CI,NO_CI,,WARNING,partial,NON_COMPLIANT,would_create,NOT_CONFIGURED,3,no CI/CD workflows
+R4S-IO,public,no,no,main,,NO_CI,NO_CI,,WARNING,partial,COMPLIANT,none,NOT_CONFIGURED,2,no CI/CD workflows
 web,public,no,no,main,TypeScript,NO_CI,NO_CI,,WARNING,partial,COMPLIANT,none,WARNING,3,no CI/CD workflows
